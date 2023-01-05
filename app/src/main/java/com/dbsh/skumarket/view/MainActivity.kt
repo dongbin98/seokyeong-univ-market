@@ -2,6 +2,7 @@ package com.dbsh.skumarket.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import com.dbsh.skumarket.R
 import com.dbsh.skumarket.databinding.ActivityMainBinding
@@ -34,7 +35,7 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.loginData.observe(this) {
             if(it != null) {
-                println("TEST")
+                Toast.makeText(this, it.getRtnStatus().toString(), Toast.LENGTH_SHORT).show()
             }
         }
     }
