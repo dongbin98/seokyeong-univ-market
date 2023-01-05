@@ -25,34 +25,29 @@ class RetrofitClient() {
     }
 
     private fun getUnsafeOkHttpClient() : OkHttpClient.Builder {
-        try {
-            val trustAllCerts = arrayOf<TrustManager>(object : X509TrustManager {
-                override fun checkClientTrusted(p0: Array<out X509Certificate>?, p1: String?) {
+        val trustAllCerts = arrayOf<TrustManager>(object : X509TrustManager {
+            override fun checkClientTrusted(p0: Array<out X509Certificate>?, p1: String?) {
 
-                }
+            }
 
-                override fun checkServerTrusted(p0: Array<out X509Certificate>?, p1: String?) {
+            override fun checkServerTrusted(p0: Array<out X509Certificate>?, p1: String?) {
 
-                }
+            }
 
-                override fun getAcceptedIssuers(): Array<X509Certificate> {
-                    return arrayOf()
-                }
-            })
-            val sslContext = SSLContext.getInstance("SSL")
-            sslContext.init(null, trustAllCerts, java.security.SecureRandom())
+            override fun getAcceptedIssuers(): Array<X509Certificate> {
+                return arrayOf()
+            }
+        })
+        val sslContext = SSLContext.getInstance("SSL")
+        sslContext.init(null, trustAllCerts, java.security.SecureRandom())
 
-            val sslSocketFactory = sslContext.socketFactory
+        val sslSocketFactory = sslContext.socketFactory
 
-            var builder = OkHttpClient.Builder()
-            builder.sslSocketFactory(sslSocketFactory, trustAllCerts[0] as X509TrustManager)
-            builder.hostnameVerifier { _, _ -> true}
+        var builder = OkHttpClient.Builder()
+        builder.sslSocketFactory(sslSocketFactory, trustAllCerts[0] as X509TrustManager)
+        builder.hostnameVerifier { _, _ -> true}
 
-            return builder
-
-        } catch (e : Exception) {
-            throw RuntimeException(e)
-        }
+        return builder
     }
 
     fun getLoginService() : LoginService {

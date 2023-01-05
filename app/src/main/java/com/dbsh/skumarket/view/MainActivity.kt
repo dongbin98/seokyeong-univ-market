@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.loginData.observe(this) {
             if(it != null) {
-                println("야 기분좋다")
+                println("TEST")
             }
         }
     }
