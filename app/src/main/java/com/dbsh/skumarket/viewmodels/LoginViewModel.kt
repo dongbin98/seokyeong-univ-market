@@ -20,25 +20,27 @@ class LoginViewModel : ViewModel() {
         loginService = retrofitClient.getLoginService()
         loginService.getLogin(RequestLoginData(id, pw, "password", "sku")).enqueue(object : Callback<ResponseLogin> {
             override fun onResponse(call: Call<ResponseLogin>, response: Response<ResponseLogin>) {
-                // 통신 성공
+                // 응답 수신 성공
                 if(response.isSuccessful) {
                     // 로그인 성공
-                    if(response.body()?.equals("S") == true) {
+                    if(response.body()?.rtnStatus.equals("S")) {
                         loginData.value = response.body()
-                        loginState.value = "s"
+                        loginState.value = "로그인 성공"
                     }
                     // 로그인 실패
                     else {
-                        loginState.value = "f"
+                        loginState.value = "로그인 실패"
                     }
                 } else {
-                    // 통신 실패
-                    loginState.value = "f"
+                    // 응답 수신 실패
+                    println(response)
+                    loginState.value = "응답 실패"
                 }
             }
 
             override fun onFailure(call: Call<ResponseLogin>, t: Throwable) {
-                loginState.value = "n"
+                // 통신 실패
+                loginState.value = "통신 실패"
             }
         })
     }
