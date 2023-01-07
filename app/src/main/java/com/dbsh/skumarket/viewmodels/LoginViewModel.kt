@@ -2,8 +2,8 @@ package com.dbsh.skumarket.viewmodels
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.dbsh.skumarket.retrofit.RequestLoginData
-import com.dbsh.skumarket.retrofit.ResponseLogin
+import com.dbsh.skumarket.model.RequestLoginData
+import com.dbsh.skumarket.model.ResponseLogin
 import com.dbsh.skumarket.retrofit.RetrofitClient
 import com.dbsh.skumarket.service.LoginService
 import retrofit2.Call

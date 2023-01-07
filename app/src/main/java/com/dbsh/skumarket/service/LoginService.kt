@@ -1,7 +1,7 @@
 package com.dbsh.skumarket.service
 
-import com.dbsh.skumarket.retrofit.RequestLoginData
-import com.dbsh.skumarket.retrofit.ResponseLogin
+import com.dbsh.skumarket.model.RequestLoginData
+import com.dbsh.skumarket.model.ResponseLogin
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.Headers

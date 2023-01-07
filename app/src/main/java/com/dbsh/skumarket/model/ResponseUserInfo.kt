@@ -1,4 +1,4 @@
-package com.dbsh.skumarket.retrofit
+package com.dbsh.skumarket.model
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName

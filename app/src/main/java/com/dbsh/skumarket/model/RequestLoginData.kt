@@ -1,4 +1,4 @@
-package com.dbsh.skumarket.retrofit
+package com.dbsh.skumarket.model
 
 data class RequestLoginData (
     var username : String,
