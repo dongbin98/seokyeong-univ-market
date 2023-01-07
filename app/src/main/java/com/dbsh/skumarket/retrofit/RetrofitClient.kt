@@ -9,7 +9,7 @@ import javax.net.ssl.SSLContext
 import javax.net.ssl.TrustManager
 import javax.net.ssl.X509TrustManager
 
-class RetrofitClient() {
+class RetrofitClient {
     private var loginService : LoginService
     private var retrofit : Retrofit
 
