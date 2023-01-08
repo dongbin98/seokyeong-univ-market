@@ -28,7 +28,6 @@ class MainActivity : AppCompatActivity() {
         binding.viewModel = viewModel
         binding.executePendingBindings()
 
-
         binding.btLogin.setOnClickListener {
             viewModel.getUserData(binding.etLoginId.text.toString(), binding.etLoginPw.text.toString())
         }

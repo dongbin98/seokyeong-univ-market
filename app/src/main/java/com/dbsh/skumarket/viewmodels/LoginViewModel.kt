@@ -1,5 +1,6 @@
 package com.dbsh.skumarket.viewmodels
 
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.dbsh.skumarket.retrofit.RequestLoginData
@@ -30,6 +31,7 @@ class LoginViewModel : ViewModel() {
                     // 로그인 실패
                     else {
                         loginState.value = "f"
+
                     }
                 } else {
                     // 통신 실패
