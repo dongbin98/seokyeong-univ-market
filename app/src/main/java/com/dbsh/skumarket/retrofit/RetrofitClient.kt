@@ -13,9 +13,11 @@ class RetrofitClient {
     private var loginService : LoginService
     private var retrofit : Retrofit
 
+    // SeoKyeong Portal Login Url
     private val baseUrl : String = "https://sportal.skuniv.ac.kr/sportal/"
 
     init {
+        // 클라이언트 초기화
         retrofit = Retrofit.Builder()
             .baseUrl(baseUrl)
             .addConverterFactory(GsonConverterFactory.create())
@@ -24,6 +26,7 @@ class RetrofitClient {
         loginService = retrofit.create(LoginService::class.java)
     }
 
+    // SSL Auth Avoid
     private fun getUnsafeOkHttpClient() : OkHttpClient.Builder {
         val trustAllCerts = arrayOf<TrustManager>(object : X509TrustManager {
             override fun checkClientTrusted(p0: Array<out X509Certificate>?, p1: String?) {

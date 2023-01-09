@@ -11,7 +11,6 @@ import com.dbsh.skumarket.viewmodels.HomeViewModel
 import com.dbsh.skumarket.viewmodels.LoginViewModel
 
 class HomeActivity : AppCompatActivity() {
-
     private lateinit var binding : ActivityHomeBinding
     private lateinit var viewModel : HomeViewModel
 
