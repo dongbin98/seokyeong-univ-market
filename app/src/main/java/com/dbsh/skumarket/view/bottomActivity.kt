@@ -19,20 +19,25 @@ class bottomActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // binding 초기화
         binding = ActivityBottomBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         setFragment(TAG_HOME, HomeFragment())
 
+        // 하단 탭 이벤트 처리위해 객체 생성
         binding.navigationView.setOnItemSelectedListener { item ->
             when(item.itemId) {
                 R.id.calenderFragment -> setFragment(TAG_HOME, HomeFragment())
-                R.id.homeFragment -> setFragment(TAG_CHATTING, HomeFragment())
+                R.id.homeFragment -> setFragment(TAG_CHATTING, ChattingFragment())
                 R.id.myPageFragment-> setFragment(TAG_MY_PAGE, MyPageFragment())
             }
             true
         }
     }
+
+    // 다른 프레그먼트 화면으로 이동하는 기능
     private fun setFragment(tag: String, fragment: Fragment){
         val manager: FragmentManager = supportFragmentManager
         val fragTransaction = manager.beginTransaction()
@@ -58,7 +63,7 @@ class bottomActivity : AppCompatActivity() {
         }
 
         if (tag == TAG_HOME) {
-            if (home!=null){
+            if (home != null){
                 fragTransaction.show(home)
             }
         }

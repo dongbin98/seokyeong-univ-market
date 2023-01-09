@@ -3,19 +3,17 @@ package com.dbsh.skumarket.retrofit
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-class ResponseLogin {
+data class ResponseLogin (
     @SerializedName("access_token")
     @Expose
-    private var accessToken: String? = null
+    val accessToken : String?,
 
     @SerializedName("USER_INFO")
     @Expose
-    private var userInfo: ResponseUserInfo? = null
+    val userInfo : ResponseUserInfo?,
 
     @SerializedName("RTN_STATUS")
     @Expose
-    private var rtnStatus: String? = null
+    val rtnStatus : String?
+)
 
-    fun getRtnStatus() : String? { return rtnStatus }
-    fun getUserInfo() : ResponseUserInfo? { return userInfo }
-}

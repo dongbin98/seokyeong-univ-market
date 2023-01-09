@@ -1,7 +1,9 @@
 package com.dbsh.skumarket.view
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import com.dbsh.skumarket.R
@@ -32,9 +34,15 @@ class MainActivity : AppCompatActivity() {
             viewModel.getUserData(binding.etLoginId.text.toString(), binding.etLoginPw.text.toString())
         }
 
+        viewModel.loginState.observe(this) {
+            Log.d("SKUM", "Network State : $it")
+        }
+
         viewModel.loginData.observe(this) {
             if(it != null) {
-                Toast.makeText(this, it.getRtnStatus().toString(), Toast.LENGTH_SHORT).show()
+                Log.d("SKUM", "Name : ${it.userInfo?.korName}")
+                val intent = Intent(this, bottomActivity::class.java)
+                startActivity(intent)
             }
         }
     }

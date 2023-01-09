@@ -12,7 +12,7 @@ class ResponseUserInfo {
     // 이름
     @SerializedName("KOR_NAME")
     @Expose
-    private var korName: String? = null
+    var korName: String? = null
 
     // 전화번호
     @SerializedName("PHONE_MOBILE")
