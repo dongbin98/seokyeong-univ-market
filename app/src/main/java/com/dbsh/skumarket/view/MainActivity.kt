@@ -9,7 +9,6 @@ import com.dbsh.skumarket.R
 import com.dbsh.skumarket.databinding.ActivityMainBinding
 import com.dbsh.skumarket.viewmodels.LoginViewModel
 
-
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityMainBinding
@@ -18,14 +17,12 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        binding.lifecycleOwner = this
         viewModel = LoginViewModel()
-        binding.apply {
-            lifecycleOwner = this@MainActivity
-            viewModel = viewModel
-            executePendingBindings()
-        }
+        binding.viewModel = viewModel
+        binding.executePendingBindings()
 
-        binding.btLogin.setOnClickListener{
+        binding.btLogin.setOnClickListener {
             viewModel.getUserData(binding.etLoginId.text.toString(), binding.etLoginPw.text.toString())
         }
 
@@ -36,7 +33,7 @@ class MainActivity : AppCompatActivity() {
         viewModel.loginData.observe(this) {
             if(it != null) {
                 Log.d("SKUM", "Name : ${it.userInfo?.korName}")
-                val intent = Intent(this, HomeActivity::class.java)
+                val intent = Intent(this, bottomActivity::class.java)
                 startActivity(intent)
             }
         }
