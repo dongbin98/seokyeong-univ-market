@@ -17,10 +17,12 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-        binding.lifecycleOwner = this
         viewModel = LoginViewModel()
-        binding.viewModel = viewModel
-        binding.executePendingBindings()
+        binding.apply {
+            lifecycleOwner = this@MainActivity
+            viewModel = viewModel
+            executePendingBindings()
+        }
 
         binding.btLogin.setOnClickListener {
             viewModel.getUserData(binding.etLoginId.text.toString(), binding.etLoginPw.text.toString())
