@@ -32,7 +32,7 @@
                 android:value="" />
         </activity>
 
-        <activity android:name=".view.bottomActivity"/>
+        <activity android:name=".view.BottomActivity"/>
     </application>
 
 </manifest>

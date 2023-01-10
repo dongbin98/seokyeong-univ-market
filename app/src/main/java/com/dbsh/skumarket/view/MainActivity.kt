@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
         viewModel.loginData.observe(this) {
             if(it != null) {
                 Log.d("SKUM", "Name : ${it.userInfo?.korName}")
-                val intent = Intent(this, bottomActivity::class.java)
+                val intent = Intent(this, BottomActivity::class.java)
                 startActivity(intent)
             }
         }
