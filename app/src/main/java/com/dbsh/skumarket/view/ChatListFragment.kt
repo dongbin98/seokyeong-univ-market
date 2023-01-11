@@ -13,37 +13,36 @@ import com.dbsh.skumarket.databinding.FragmentChatListBinding
 import com.dbsh.skumarket.model.LastChatData
 import com.dbsh.skumarket.viewmodels.ChatListViewModel
 
-class ChatListFragment : Fragment() {
+class ChatListFragment : BaseFragment<FragmentChatListBinding>(R.layout.fragment_chat_list) {
     companion object{
         const val TAG = "ChatList Fragment"
     }
 
-    private lateinit var binding: FragmentChatListBinding
     private lateinit var viewModel: ChatListViewModel
     lateinit var adapter: ChatListAdapter
     lateinit var chatList: ArrayList<LastChatData>
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_chat_list, container, false)
+    override fun init() {
         viewModel = ChatListViewModel()
         binding.apply {
             viewModel = viewModel
-            lifecycleOwner = viewLifecycleOwner
-            executePendingBindings()
         }
-
         // RecyclerView Setting
         chatList = ArrayList()
         adapter = ChatListAdapter(chatList)
-        binding.chatRecyclerview.layoutManager = LinearLayoutManager(context)
+        adapter.apply {
+
+        }
         binding.chatRecyclerview.adapter = adapter
+        binding.chatRecyclerview.layoutManager = LinearLayoutManager(context)
 
         // 임시 데이터 삽입
         chatList.add(LastChatData("염동빈", "22-10-28", "좋은 거래였습니다\n다시는 안합니다"))
+        adapter.notifyItemInserted(chatList.size)
         chatList.add(LastChatData("양승협", "22-10-27", "댁만 좋았나본데요"))
+        adapter.notifyItemInserted(chatList.size)
         chatList.add(LastChatData("박태룡", "22-10-26", "니들 다 F다"))
-        adapter.notifyDataSetChanged()
-
-        return binding.root
+        adapter.notifyItemInserted(chatList.size)
     }
+
 }
