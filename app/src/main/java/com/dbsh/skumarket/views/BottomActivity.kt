@@ -1,4 +1,4 @@
-package com.dbsh.skumarket.view
+package com.dbsh.skumarket.views
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

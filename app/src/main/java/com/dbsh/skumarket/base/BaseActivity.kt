@@ -1,4 +1,4 @@
-package com.dbsh.skumarket.view
+package com.dbsh.skumarket.base
 
 import android.os.Bundle
 import androidx.annotation.LayoutRes

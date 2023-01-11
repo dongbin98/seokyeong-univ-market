@@ -3,7 +3,7 @@
 <data>
     <variable
         name="lastChat"
-        type="com.dbsh.skumarket.model.LastChatData" />
+        type="com.dbsh.skumarket.model.LastChat" />
 </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"

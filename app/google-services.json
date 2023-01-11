@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:910926559677:android:c0dcfdf4724211707bbad4",
+        "mobilesdk_app_id": "1:910926559677:android:bcc4dc7a7b4c8a647bbad4",
         "android_client_info": {
-          "package_name": "com.dhsh.skumarket"
+          "package_name": "com.dbsh.skumarket"
         }
       },
       "oauth_client": [

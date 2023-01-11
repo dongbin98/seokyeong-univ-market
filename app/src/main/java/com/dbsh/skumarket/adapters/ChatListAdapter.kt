@@ -1,15 +1,14 @@
-package com.dbsh.skumarket.adapter
+package com.dbsh.skumarket.adapters
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.dbsh.skumarket.R
 import com.dbsh.skumarket.databinding.ItemChatBinding
-import com.dbsh.skumarket.model.LastChatData
+import com.dbsh.skumarket.model.LastChat
 
-class ChatListAdapter(data: ArrayList<LastChatData>) : RecyclerView.Adapter<ChatListAdapter.ListViewHolder>() {
-    var mData: ArrayList<LastChatData> = data
+class ChatListAdapter(data: ArrayList<LastChat>) : RecyclerView.Adapter<ChatListAdapter.ListViewHolder>() {
+    var mData: ArrayList<LastChat> = data
     private var mClickable: Boolean? = null
 
     // 대화목록 클릭 처리부
@@ -35,7 +34,7 @@ class ChatListAdapter(data: ArrayList<LastChatData>) : RecyclerView.Adapter<Chat
     }
 
     class ListViewHolder(private val binding: ItemChatBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: LastChatData) {
+        fun bind(item: LastChat) {
             binding.lastChat = item
         }
     }
