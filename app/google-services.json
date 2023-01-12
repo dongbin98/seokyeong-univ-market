@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "731192704636",
+    "project_id": "sku-market-43b38",
+    "storage_bucket": "sku-market-43b38.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:731192704636:android:232f6bcb541c3aa6f5d3f9",
+        "android_client_info": {
+          "package_name": "com.dbsh.skumarket"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "731192704636-kb6c35c3inc4gi5m13rordr09c28b1vd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA1EBhJccFvWz_8IcrmP4T0SuTGYN0mbVA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "731192704636-kb6c35c3inc4gi5m13rordr09c28b1vd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
