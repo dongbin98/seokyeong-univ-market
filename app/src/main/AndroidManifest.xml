@@ -32,14 +32,8 @@
                 android:value="" />
         </activity>
         <activity android:name=".views.RegisterActivity"/>
-        <activity android:name=".presentation.BottomActivity"/>
-        <service
-            android:name=".data.service.MyFirebaseMessagingService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
-            </intent-filter>
-        </service>
+        <activity android:name=".views.BottomActivity"/>
+        <activity android:name=".views.ChatActivity"/>
     </application>
 
 </manifest>

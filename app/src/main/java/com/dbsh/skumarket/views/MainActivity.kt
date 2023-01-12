@@ -18,16 +18,16 @@ class MainActivity: BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         }
 
         binding.mainLoginButton.setOnClickListener {
-            if(binding.mainLoginId.toString().isNullOrBlank() || binding.mainLoginPw.toString().isNullOrBlank()) {
+            if(binding.mainLoginId.text.toString().isNullOrBlank() || binding.mainLoginPw.text.toString().isNullOrBlank()) {
                 Toast.makeText(this, "아이디 또는 패스워드를 입력해주세요", Toast.LENGTH_SHORT).show()
             } else {
-                viewModel.login(binding.mainLoginId.toString(), binding.mainLoginPw.toString())
+                viewModel.login(binding.mainLoginId.text.toString(), binding.mainLoginPw.text.toString())
             }
         }
 
         // 회원가입 이동
         binding.mainRegistAccount.setOnClickListener{
-            intent = Intent(this, RegisterActivity::class.java)
+            intent = Intent(this@MainActivity, RegisterActivity::class.java)
             startActivity(intent)
         }
 
@@ -36,14 +36,23 @@ class MainActivity: BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
             //
         }
 
+        // 로그인 처리
         viewModel.loginState.observe(this) {
-            println(it.toString())
             if(it != null) {
+                println(it.toString())
                 if(it.equals("S")) {
                     Toast.makeText(this, "로그인 성공", Toast.LENGTH_SHORT).show()
+                    intent = Intent(this@MainActivity, BottomActivity::class.java)
+                    startActivity(intent)
                 } else {
                     Toast.makeText(this, "로그인 실패", Toast.LENGTH_SHORT).show()
                 }
+            }
+        }
+
+        viewModel.loginUser.observe(this) {
+            if(it != null) {
+                println(it.email)
             }
         }
     }

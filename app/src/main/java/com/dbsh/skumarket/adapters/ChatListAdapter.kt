@@ -5,10 +5,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.dbsh.skumarket.databinding.ItemChatBinding
-import com.dbsh.skumarket.model.LastChat
+import com.dbsh.skumarket.model.ChatListDto
+import com.dbsh.skumarket.model.ChatRoom
 
-class ChatListAdapter(data: ArrayList<LastChat>) : RecyclerView.Adapter<ChatListAdapter.ListViewHolder>() {
-    var mData: ArrayList<LastChat> = data
+class ChatListAdapter(data: ArrayList<ChatListDto>) : RecyclerView.Adapter<ChatListAdapter.ListViewHolder>() {
+    var mData: ArrayList<ChatListDto> = data
     private var mClickable: Boolean? = null
 
     // 대화목록 클릭 처리부
@@ -34,9 +35,8 @@ class ChatListAdapter(data: ArrayList<LastChat>) : RecyclerView.Adapter<ChatList
     }
 
     class ListViewHolder(private val binding: ItemChatBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: LastChat) {
+        fun bind(item: ChatListDto) {
             binding.lastChat = item
         }
     }
-
 }

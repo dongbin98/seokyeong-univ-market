@@ -48,6 +48,7 @@ class RegisterActivity: BaseActivity<ActivityRegisterBinding>(R.layout.activity_
                 binding.registerSkuAuth.setBackgroundResource(R.drawable.button_gray_radius_20)
                 isAuth = true
                 binding.registerSkuAuth.isClickable = false
+                binding.registerSkuAuth.text = "인증완료"
             }
         }
 

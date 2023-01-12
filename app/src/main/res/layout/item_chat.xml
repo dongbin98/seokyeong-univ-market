@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:app="http://schemas.android.com/apk/res-auto">
 <data>
+    <import type="java.util.HashMap"/>
     <variable
-        name="lastChat"
-        type="com.dbsh.skumarket.model.LastChat" />
+        name="LastChat"
+        type="com.dbsh.skumarket.model.ChatListDto" />
 </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -24,12 +25,12 @@
             android:id="@+id/chat_nick_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{lastChat.nickName}"
             android:textColor="@color/black"
+            android:text="@{LastChat.name}"
             android:textSize="24sp"
             android:textStyle="bold"
             android:layout_marginTop="16dp"
-            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
             app:layout_constraintLeft_toRightOf="@id/chat_profile_image"
             app:layout_constraintTop_toTopOf="parent"/>
 
@@ -37,8 +38,8 @@
             android:id="@+id/chat_last_message"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:text="@{LastChat.lastChat}"
             android:maxLines="2"
-            android:text="@{lastChat.lastMessage}"
             android:layout_marginTop="4dp"
             app:layout_constraintTop_toBottomOf="@id/chat_nick_name"
             app:layout_constraintLeft_toLeftOf="@id/chat_nick_name"
@@ -48,7 +49,7 @@
             android:id="@+id/chat_time"
             android:layout_width="wrap_content"
             android:layout_height="24dp"
-            android:text="@{lastChat.chatTime}"
+            android:text="@{LastChat.lastDate}"
             android:layout_marginRight="16dp"
             app:layout_constraintTop_toTopOf="@id/chat_nick_name"
             app:layout_constraintRight_toRightOf="parent" />

@@ -1,5 +1,7 @@
 package com.dbsh.skumarket.viewmodels
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.dbsh.skumarket.model.User
@@ -7,8 +9,10 @@ import com.dbsh.skumarket.model.RequestLoginData
 import com.dbsh.skumarket.model.ResponseLogin
 import com.dbsh.skumarket.repository.retrofit.RetrofitClient
 import com.dbsh.skumarket.api.SkuAuthService
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.ktx.database
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -49,15 +53,18 @@ class RegisterViewModel : ViewModel() {
         })
     }
 
-    fun signUp(email: String, pw: String, name: String, uid: String) {
-        val auth = FirebaseAuth.getInstance()
+    fun signUp(email: String, pw: String, name: String, stuId: String) {
+        val auth = Firebase.auth
+        val db = Firebase.database
         auth.createUserWithEmailAndPassword(email, pw).addOnCompleteListener {
             if(it.isSuccessful) {
                 try {
                     val user = auth.currentUser
                     val userId = user?.uid
-                    FirebaseDatabase.getInstance().getReference("User").child("users").child(userId.toString())
-                        .setValue(User(name, uid))
+
+                    // Realtimebase
+                    db.getReference("User").child("users").child(userId.toString())
+                        .setValue(User(name, stuId))
                     registerState.value = "S"
                 } catch (e: Exception) {
                     e.printStackTrace()

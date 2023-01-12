@@ -2,19 +2,22 @@ package com.dbsh.skumarket.viewmodels
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 class LoginViewModel: ViewModel() {
     var loginState: MutableLiveData<String> = MutableLiveData()
-    val loginUser: MutableLiveData<FirebaseUser> = MutableLiveData()
+    var loginUser: MutableLiveData<FirebaseUser> = MutableLiveData()
 
-    fun login(id: String, pw: String) {
-        val auth = FirebaseAuth.getInstance()
-        auth.signInWithEmailAndPassword(id, pw).addOnCompleteListener {
+    fun login(email: String, pw: String) {
+        val auth = Firebase.auth
+        println(email)
+        println(pw)
+        auth.signInWithEmailAndPassword(email, pw).addOnCompleteListener {
             if(it.isSuccessful) {
-                loginState.value = "S"
                 loginUser.value = auth.currentUser
+                loginState.value = "S"
             } else {
                 loginState.value = "F"
             }
