@@ -1,4 +1,4 @@
-package com.dbsh.skumarket.view
+package com.dbsh.skumarket.views
 
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -24,7 +24,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
 
-class AddSelling : AppCompatActivity() {
+class AddSellingActivity : AppCompatActivity() {
     private var seletedUri: Uri? = null
 
     private val auth: FirebaseAuth by lazy {

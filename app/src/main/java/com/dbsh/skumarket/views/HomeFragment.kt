@@ -1,4 +1,4 @@
-package com.dbsh.skumarket.view
+package com.dbsh.skumarket.views
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dbsh.skumarket.R
+import com.dbsh.skumarket.adapters.SellingAdapter
 import com.dbsh.skumarket.databinding.FragmentHomeBinding
 import com.dbsh.skumarket.model.SellingModelData
 import com.google.android.material.snackbar.Snackbar
@@ -20,6 +21,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
+import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
 
 // TODO: Rename parameter arguments, choose names that match
@@ -148,7 +150,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         // 내 물건 팔기 버튼;
         binding!!.addButton.setOnClickListener {
             context?.let{
-                val intent = Intent(it, AddSelling::class.java)
+                val intent = Intent(it, AddSellingActivity::class.java)
                 startActivity(intent)
             }
         }

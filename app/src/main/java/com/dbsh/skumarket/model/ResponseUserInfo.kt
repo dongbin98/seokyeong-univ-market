@@ -7,27 +7,25 @@ data class ResponseUserInfo (
     // 학번
     @SerializedName("ID")
     @Expose
-    var id : String?,
+    val id : String?,
 
     // 이름
     @SerializedName("KOR_NAME")
     @Expose
-
-    var korName: String?,
-
+    val korName: String?,
 
     // 전화번호
     @SerializedName("PHONE_MOBILE")
     @Expose
-    var phoneMobile : String?,
+    val phoneMobile : String?,
 
     // 단대
     @SerializedName("COL_NM")
     @Expose
-    var colNm : String?,
+    val colNm : String?,
 
     // 학과
     @SerializedName("TEAM_NM")
     @Expose
-    var teamNm : String?
+    val teamNm : String?
 )

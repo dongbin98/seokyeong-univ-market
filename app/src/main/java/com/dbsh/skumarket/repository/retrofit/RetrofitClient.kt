@@ -1,6 +1,6 @@
-package com.dbsh.skumarket.retrofit
+package com.dbsh.skumarket.repository.retrofit
 
-import com.dbsh.skumarket.service.LoginService
+import com.dbsh.skumarket.api.SkuAuthService
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -10,7 +10,7 @@ import javax.net.ssl.TrustManager
 import javax.net.ssl.X509TrustManager
 
 class RetrofitClient {
-    private var loginService : LoginService
+    private var skuAuthService : SkuAuthService
     private var retrofit : Retrofit
 
     // SeoKyeong Portal Login Url
@@ -23,7 +23,7 @@ class RetrofitClient {
             .addConverterFactory(GsonConverterFactory.create())
             .client(getUnsafeOkHttpClient().build())
             .build()
-        loginService = retrofit.create(LoginService::class.java)
+        skuAuthService = retrofit.create(SkuAuthService::class.java)
     }
 
     // SSL Auth Avoid
@@ -53,7 +53,7 @@ class RetrofitClient {
         return builder
     }
 
-    fun getLoginService() : LoginService {
-        return loginService
+    fun getLoginService() : SkuAuthService {
+        return skuAuthService
     }
 }

@@ -1,4 +1,4 @@
-package com.dbsh.skumarket.view
+package com.dbsh.skumarket.adapters
 
 
 
@@ -15,7 +15,9 @@ import com.dbsh.skumarket.databinding.SellingItemBinding
 
 import com.dbsh.skumarket.model.SellingModelData
 
-class SellingAdapter(val onItemClicked: (SellingModelData) -> Unit) : ListAdapter<SellingModelData, SellingAdapter.ViewHolder>(diffUtil) {
+class SellingAdapter(val onItemClicked: (SellingModelData) -> Unit) : ListAdapter<SellingModelData, SellingAdapter.ViewHolder>(
+    diffUtil
+) {
     inner class ViewHolder(private val binding: SellingItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 

@@ -1,40 +1,42 @@
-package com.dbsh.skumarket.view
+package com.dbsh.skumarket.views
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.databinding.DataBindingUtil
 import com.dbsh.skumarket.R
 import com.dbsh.skumarket.databinding.ActivityBottomBinding
-
+import com.dbsh.skumarket.viewmodels.BottomViewModel
 
 private const val TAG_HOME = "home_fragment"
-private const val TAG_CHATTING = "chatting_fragment"
+private const val TAG_CHAT = "chat_list_fragment"
 private const val TAG_MY_PAGE = "my_page_fragment"
 
-class bottomActivity : AppCompatActivity() {
+class BottomActivity : AppCompatActivity() {
 
-    private lateinit var binding : ActivityBottomBinding
+    private lateinit var binding: ActivityBottomBinding
+    private lateinit var viewModel: BottomViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_bottom)
+        viewModel = BottomViewModel()
+        binding.apply {
+            lifecycleOwner = this@BottomActivity
+            viewModel = viewModel
+            executePendingBindings()
 
-        // binding 초기화
-        binding = ActivityBottomBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        setFragment(TAG_HOME, HomeFragment())
-
-        // 하단 탭 이벤트 처리위해 객체 생성
-        binding.navigationView.setOnItemSelectedListener { item ->
-            when(item.itemId) {
-                R.id.calenderFragment -> setFragment(TAG_HOME, HomeFragment())
-                R.id.homeFragment -> setFragment(TAG_CHATTING, ChattingFragment())
-                R.id.myPageFragment-> setFragment(TAG_MY_PAGE, MyPageFragment())
+            navigationView.setOnItemSelectedListener { item ->
+                when(item.itemId) {
+                    R.id.calenderFragment -> setFragment(TAG_HOME, HomeFragment())
+                    R.id.homeFragment -> setFragment(TAG_CHAT, ChatListFragment())
+                    R.id.myPageFragment-> setFragment(TAG_MY_PAGE, MyPageFragment())
+                }
+                true
             }
-            true
         }
+        setFragment(TAG_HOME, HomeFragment())
     }
 
     // 다른 프레그먼트 화면으로 이동하는 기능
@@ -47,7 +49,7 @@ class bottomActivity : AppCompatActivity() {
         }
 
         val home = manager.findFragmentByTag(TAG_HOME)
-        val chatting = manager.findFragmentByTag(TAG_CHATTING)
+        val chatting = manager.findFragmentByTag(TAG_CHAT)
         val myPage = manager.findFragmentByTag(TAG_MY_PAGE)
 
         if (home != null){
@@ -67,7 +69,7 @@ class bottomActivity : AppCompatActivity() {
                 fragTransaction.show(home)
             }
         }
-        else if (tag == TAG_CHATTING) {
+        else if (tag == TAG_CHAT) {
             if (chatting != null) {
                 fragTransaction.show(chatting)
             }
@@ -78,7 +80,6 @@ class bottomActivity : AppCompatActivity() {
                 fragTransaction.show(myPage)
             }
         }
-
         fragTransaction.commitAllowingStateLoss()
     }
 }

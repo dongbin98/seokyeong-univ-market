@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "731192704636",
-    "project_id": "sku-market-43b38",
-    "storage_bucket": "sku-market-43b38.appspot.com"
+    "project_number": "910926559677",
+    "project_id": "sku-market-e8758",
+    "storage_bucket": "sku-market-e8758.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:731192704636:android:232f6bcb541c3aa6f5d3f9",
+        "mobilesdk_app_id": "1:910926559677:android:bcc4dc7a7b4c8a647bbad4",
         "android_client_info": {
           "package_name": "com.dbsh.skumarket"
         }
       },
       "oauth_client": [
         {
-          "client_id": "731192704636-kb6c35c3inc4gi5m13rordr09c28b1vd.apps.googleusercontent.com",
+          "client_id": "910926559677-0l01op9o20bv64s106c5j32b7o3a75pe.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyA1EBhJccFvWz_8IcrmP4T0SuTGYN0mbVA"
+          "current_key": "AIzaSyB-UGwBk6633_NMs-AlDCOrInILix7H4Lw"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "731192704636-kb6c35c3inc4gi5m13rordr09c28b1vd.apps.googleusercontent.com",
+              "client_id": "910926559677-0l01op9o20bv64s106c5j32b7o3a75pe.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
