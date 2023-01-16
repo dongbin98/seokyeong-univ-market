@@ -6,10 +6,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.dbsh.skumarket.databinding.ItemChatBinding
 import com.dbsh.skumarket.databinding.ItemChatListBinding
+import com.dbsh.skumarket.model.Chat
 import com.dbsh.skumarket.model.ChatListDto
 
-class ChatListAdapter(data: ArrayList<ChatListDto>) : RecyclerView.Adapter<ChatListAdapter.ListViewHolder>() {
-    var mData: ArrayList<ChatListDto> = data
+class ChatAdapter(data: ArrayList<Chat>) : RecyclerView.Adapter<ChatAdapter.ListViewHolder>() {
+    var mData: ArrayList<Chat> = data
     private var mClickable: Boolean? = null
 
     fun dataClear() {
@@ -26,7 +27,7 @@ class ChatListAdapter(data: ArrayList<ChatListDto>) : RecyclerView.Adapter<ChatL
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
-        val binding = ItemChatListBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = ItemChatBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ListViewHolder(binding)
     }
 
@@ -38,9 +39,9 @@ class ChatListAdapter(data: ArrayList<ChatListDto>) : RecyclerView.Adapter<ChatL
         return mData.size
     }
 
-    class ListViewHolder(private val binding: ItemChatListBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: ChatListDto) {
-            binding.lastChat = item
+    class ListViewHolder(private val binding: ItemChatBinding): RecyclerView.ViewHolder(binding.root) {
+        fun bind(item: Chat) {
+            binding.chat = item
         }
     }
 }

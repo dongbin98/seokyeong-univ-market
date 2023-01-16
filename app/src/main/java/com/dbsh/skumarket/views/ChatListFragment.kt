@@ -1,5 +1,6 @@
 package com.dbsh.skumarket.views
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dbsh.skumarket.R
@@ -17,22 +18,23 @@ class ChatListFragment : BaseFragment<FragmentChatListBinding>(R.layout.fragment
 
     private lateinit var viewModel: ChatListViewModel
     private lateinit var adapter: ChatListAdapter
-    lateinit var chatList: ArrayList<ChatListDto>
+    lateinit var chatRoomList: ArrayList<ChatListDto>
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun init() {
         viewModel = ChatListViewModel()
         binding.apply {
             viewModel = viewModel
         }
         // RecyclerView Setting
-        chatList = ArrayList()
-        adapter = ChatListAdapter(chatList)
+        chatRoomList = ArrayList()
+        adapter = ChatListAdapter(chatRoomList)
         adapter.apply {
 
         }
 
-        binding.chatRecyclerview.adapter = adapter
-        binding.chatRecyclerview.layoutManager = LinearLayoutManager(context)
+        binding.chatListRecyclerview.adapter = adapter
+        binding.chatListRecyclerview.layoutManager = LinearLayoutManager(context)
 
         viewModel.loadChatRoom()
 
@@ -43,9 +45,12 @@ class ChatListFragment : BaseFragment<FragmentChatListBinding>(R.layout.fragment
 
         viewModel.chatList.observe(this) {
             if(it != null) {
-                for(chat in it) {
-                    chatList.add(chat)
-                    adapter.notifyItemInserted(chatList.size-1)
+                chatRoomList.clear()
+                adapter.dataClear()
+//                adapter.notifyDataSetChanged()
+                for(chatRoom in it) {
+                    chatRoomList.add(chatRoom)
+                    adapter.notifyItemInserted(chatRoomList.size-1)
                 }
             }
         }

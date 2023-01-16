@@ -1,3 +1,3 @@
 package com.dbsh.skumarket.model
 
-data class ChatListDto(val name: String, val lastChat: String, val lastDate: String)
+data class ChatListDto(val uid: String, val lastMessage: String, val lastDate: String, val otherOne: String)

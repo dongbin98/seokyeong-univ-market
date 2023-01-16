@@ -20,11 +20,11 @@ import kotlin.collections.ArrayList
 class ChatListViewModel : ViewModel() {
     var chatList: MutableLiveData<ArrayList<ChatListDto>> = MutableLiveData()
     private val auth = Firebase.auth
-    private val db = Firebase.database.reference
+    private val chatRef = Firebase.database.reference.child("ChatRoom")
     private val uid = auth.currentUser?.uid
 
     fun loadChatRoom() {
-        db.child("ChatRoom").child("chatRooms").orderByChild("users/$uid").equalTo(true)
+        chatRef.child("chatRooms").orderByChild("users/$uid").equalTo(true)
             .addValueEventListener(object: ValueEventListener{
             override fun onCancelled(error: DatabaseError) {
             }
@@ -35,14 +35,16 @@ class ChatListViewModel : ViewModel() {
                 for(chatRoom in snapshot.children) {
                     println("chatRoom = $chatRoom")
 
-                    var tmpChat: ChatListDto? = null
+                    var lastChat: ChatListDto? = null
+                    var otherOne = chatRoom.child("otherOne").value.toString()
 
                     for(chat in chatRoom.child("messages").children) {
                         println("messasge in data = $chat")
-                        tmpChat = ChatListDto(chat.child("uid").value.toString(), chat.child("message").value.toString(), chat.child("time").value.toString()   )
+                        lastChat = ChatListDto(chat.child("uid").value.toString(), chat.child("message").value.toString(), chat.child("time").value.toString(), otherOne)
                     }
-                    if (tmpChat != null) {
-                        dataList.add(tmpChat)
+
+                    if (lastChat != null) {
+                        dataList.add(lastChat)
                     }
                 }
                 chatList.value = dataList

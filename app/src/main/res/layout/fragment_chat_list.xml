@@ -11,7 +11,7 @@
         android:background="@color/white">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/chat_recyclerview"
+            android:id="@+id/chat_list_recyclerview"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintTop_toTopOf="parent"
