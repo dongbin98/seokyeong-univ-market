@@ -61,12 +61,12 @@ class SellingAdapter(val onItemClicked: (SellingModelData) -> Unit) : ListAdapte
     companion object {
         val diffUtil = object : DiffUtil.ItemCallback<SellingModelData>() {
             override fun areItemsTheSame(oldItem: SellingModelData, newItem: SellingModelData): Boolean {
-                // 현재 노출하고 있는 아이템과 새로운 아이템이 같은지 비교;
+                // 현재 노출하고 있는 아이템과 새로운 아이템이 같은지 비교
                 return oldItem.posttime == newItem.posttime
             }
 
             override fun areContentsTheSame(oldItem: SellingModelData, newItem: SellingModelData): Boolean {
-                // equals 비교;
+                // equals 비교
                 return oldItem == newItem
 
             }

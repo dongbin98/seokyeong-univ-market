@@ -1,7 +1,7 @@
 package com.dbsh.skumarket.model
 
 data class SellingModelData (
-    val sellerId : String,
+    val uId : String,
     val title : String,
     val posttime: Long,
     val price : String,
