@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.dbsh.skumarket.databinding.ItemChatBinding
 import com.dbsh.skumarket.databinding.ItemChatListBinding
 import com.dbsh.skumarket.model.ChatListDto
 
