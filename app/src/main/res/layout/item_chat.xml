@@ -10,7 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/rectangle_white_bg__black_underline">
+        android:background="@color/white">
 
         <ImageView
             android:id="@+id/chat_profile_image"
@@ -23,7 +23,7 @@
             android:id="@+id/chat_nick_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="사용자명"
+            android:text="@{Chat.name}"
             android:textSize="10sp"
             android:layout_marginStart="16dp"
             android:textColor="@color/black"

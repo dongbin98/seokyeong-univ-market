@@ -27,8 +27,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
         // 회원가입 이동
         binding.mainRegistAccount.setOnClickListener{
-            intent = Intent(this@MainActivity, RegisterActivity::class.java)
-            startActivity(intent)
+            Intent(this@MainActivity, RegisterActivity::class.java).run { startActivity(this) }
         }
 
         // 비밀번호 찾기 이동
@@ -42,8 +41,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
                 println(it.toString())
                 if(it.equals("S")) {
                     Toast.makeText(this, "로그인 성공", Toast.LENGTH_SHORT).show()
-                    intent = Intent(this@MainActivity, BottomActivity::class.java)
-                    startActivity(intent)
+                    Intent(this@MainActivity, BottomActivity::class.java).run { startActivity(this) }
                 } else {
                     Toast.makeText(this, "로그인 실패", Toast.LENGTH_SHORT).show()
                 }

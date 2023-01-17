@@ -21,6 +21,7 @@ class ChatListViewModel : ViewModel() {
     var chatList: MutableLiveData<ArrayList<ChatListDto>> = MutableLiveData()
     private val auth = Firebase.auth
     private val chatRef = Firebase.database.reference.child("ChatRoom")
+    private val userRef = Firebase.database.reference.child("User")
     private val uid = auth.currentUser?.uid
 
     fun loadChatRoom() {
@@ -36,18 +37,34 @@ class ChatListViewModel : ViewModel() {
                     println("chatRoom = $chatRoom")
 
                     var lastChat: ChatListDto? = null
-                    var otherOne = chatRoom.child("otherOne").value.toString()
+                    var chatRoomKey = chatRoom.key.toString()
+                    var opponentName: String?
 
-                    for(chat in chatRoom.child("messages").children) {
-                        println("messasge in data = $chat")
-                        lastChat = ChatListDto(chat.child("uid").value.toString(), chat.child("message").value.toString(), chat.child("time").value.toString(), otherOne)
-                    }
+                    for(user in chatRoom.child("users").children) {
+                        if(user.key.toString() != uid) {
+                            userRef.child("users").child(user.key.toString()).child("name").addValueEventListener(object: ValueEventListener{
+                                override fun onDataChange(snapshot: DataSnapshot) {
+                                    opponentName = snapshot.value.toString()
+                                    println("대화상대 : $opponentName")
 
-                    if (lastChat != null) {
-                        dataList.add(lastChat)
+                                    for(chat in chatRoom.child("messages").children) {
+                                        println("messasge in data = $chat")
+                                        lastChat = ChatListDto(chatRoomKey, chat.child("message").value.toString(), chat.child("time").value.toString(), opponentName.toString())
+                                    }
+
+                                    if (lastChat != null) {
+                                        dataList.add(lastChat!!)
+                                    }
+                                    chatList.value = dataList
+                                }
+
+                                override fun onCancelled(error: DatabaseError) {
+                                }
+
+                            })
+                        }
                     }
                 }
-                chatList.value = dataList
             }
         })
     }

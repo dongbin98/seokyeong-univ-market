@@ -11,6 +11,7 @@ import com.dbsh.skumarket.model.ChatListDto
 class ChatListAdapter(data: ArrayList<ChatListDto>) : RecyclerView.Adapter<ChatListAdapter.ListViewHolder>() {
     var mData: ArrayList<ChatListDto> = data
     private var mClickable: Boolean? = null
+    private var itemClickListener: OnItemClickListener? = null
 
     fun dataClear() {
         mData.clear()
@@ -22,7 +23,11 @@ class ChatListAdapter(data: ArrayList<ChatListDto>) : RecyclerView.Adapter<ChatL
     }
 
     interface OnItemClickListener {
-        fun onItemClick(v: View, position: Int)
+        fun onItemClick(v: View, data: ChatListDto, position: Int)
+    }
+
+    fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {
+        this.itemClickListener = onItemClickListener
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
@@ -38,9 +43,16 @@ class ChatListAdapter(data: ArrayList<ChatListDto>) : RecyclerView.Adapter<ChatL
         return mData.size
     }
 
-    class ListViewHolder(private val binding: ItemChatListBinding): RecyclerView.ViewHolder(binding.root) {
+    inner class ListViewHolder(private val binding: ItemChatListBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(item: ChatListDto) {
             binding.lastChat = item
+
+            val position = adapterPosition
+            if(position != RecyclerView.NO_POSITION) {
+                itemView.setOnClickListener {
+                    itemClickListener?.onItemClick(itemView, item, position)
+                }
+            }
         }
     }
 }

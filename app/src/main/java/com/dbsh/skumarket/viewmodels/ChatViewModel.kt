@@ -28,7 +28,7 @@ class ChatViewModel: ViewModel() {
 
     // 메시지 보내기
     @SuppressLint("SimpleDateFormat")
-    private fun sendMessage(chatRoomUid: String) {
+    fun sendMessage(chatRoomUid: String, message: String) {
         println("########### sendMessage() ###########")
         val time = System.currentTimeMillis()
         val dateFormat = SimpleDateFormat("MM월dd일 hh:mm:ss")
@@ -36,10 +36,9 @@ class ChatViewModel: ViewModel() {
 
         userRef.child("users").child(uid).addListenerForSingleValueEvent(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-
                 val myName = snapshot.getValue<User>()?.name.toString()
 
-                val chat = Chat(uid, _message, curTime, myName)
+                val chat = Chat(uid, message, curTime, myName)
                 println("chatRoomUid = $chatRoomUid")
                 chatRef.child("chatRooms").child(chatRoomUid).child("messages").push().setValue(chat)
             }
@@ -65,7 +64,7 @@ class ChatViewModel: ViewModel() {
                 }
                 if(chatRoomUid != null) {
                     // 채팅방 존재 시 메시지 보냄
-                    sendMessage(chatRoomUid.toString())
+                    sendMessage(chatRoomUid.toString(), _message)
                 } else {
                     // 채팅방 미존재 시 채팅방 생성
                     createChatRoom()
@@ -77,45 +76,33 @@ class ChatViewModel: ViewModel() {
     }
 
     // 채팅방 생성
-    private fun createChatRoom() {
+    fun createChatRoom() {
         println("########### createChatRoom() ###########")
 
-        // 채팅 상대 이름 가져오기
-        userRef.child("users").child(_opponent).addListenerForSingleValueEvent(object: ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                println("상대방 : ${snapshot.getValue<User>()?.name}")
-                val otherOne = snapshot.getValue<User>()?.name.toString()
+        val chatRoom = ChatRoom()
+        chatRoom.users[uid] = true
+        chatRoom.users[_opponent] = true
 
-                val chatRoom = ChatRoom()
-                chatRoom.users[uid] = true
-                chatRoom.users[_opponent] = true
-                chatRoom.otherOne = otherOne
+        val chatRoomUid: String? = chatRef.child("chatRooms").push().key
+        chatRef.child("chatRooms").child(chatRoomUid.toString()).setValue(chatRoom)
 
-                val chatRoomUid: String? = chatRef.child("chatRooms").push().key
-                chatRef.child("chatRooms").child(chatRoomUid.toString()).setValue(chatRoom)
-
-                // 채팅방 생성 후 메시지 보냄
-                sendMessage(chatRoomUid.toString())
-            }
-            override fun onCancelled(error: DatabaseError) {
-            }
-        })
+        // 채팅방 생성 후 메시지 보냄
+        sendMessage(chatRoomUid.toString(), _message)
     }
 
     // 채팅 불러오기
-    fun loadChat(opponent: String) {
-        chatRef.child("chatRooms").orderByChild("users/$uid").equalTo(true)
+    fun loadChat(roomId: String) {
+        chatRef.child("chatRooms").child(roomId)
             .addValueEventListener(object: ValueEventListener{
-                override fun onCancelled(error: DatabaseError) {
-                }
-
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val dataList = ArrayList<Chat>()
 
-                    for(chat in snapshot.child(opponent).child("messages").children) {
+                    for(chat in snapshot.child("messages").children) {
                         dataList.add(Chat(chat.child("uid").value.toString(), chat.child("message").value.toString(), chat.child("time").value.toString(), chat.child("name").value.toString()))
                     }
                     chatList.value = dataList
+                }
+                override fun onCancelled(error: DatabaseError) {
                 }
             })
     }
