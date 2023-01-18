@@ -18,7 +18,7 @@ class MainActivity: BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
         }
 
         binding.mainLoginButton.setOnClickListener {
-            if(binding.mainLoginId.text.toString().isNullOrBlank() || binding.mainLoginPw.text.toString().isNullOrBlank()) {
+            if(binding.mainLoginId.text.toString().isBlank() || binding.mainLoginPw.text.toString().isBlank()) {
                 Toast.makeText(this, "아이디 또는 패스워드를 입력해주세요", Toast.LENGTH_SHORT).show()
             } else {
                 viewModel.login(binding.mainLoginId.text.toString(), binding.mainLoginPw.text.toString())
