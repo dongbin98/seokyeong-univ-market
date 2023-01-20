@@ -4,6 +4,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.WindowManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -25,7 +26,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
 
 class AddSellingActivity : AppCompatActivity() {
-    private var seletedUri: Uri? = null
+    private var selectedUri: Uri? = null
 
     private val auth: FirebaseAuth by lazy {
         Firebase.auth
@@ -36,7 +37,7 @@ class AddSellingActivity : AppCompatActivity() {
     }
 
     private val sellingDB: DatabaseReference by lazy {
-        Firebase.database.reference.child("SellingDB")
+        Firebase.database.reference.child("Selling")
     }
 
     private val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri->
@@ -44,7 +45,7 @@ class AddSellingActivity : AppCompatActivity() {
         if(uri != null) {
             // 사진을 정상적으로 가져왔을때
             findViewById<ImageView>(R.id.photoImageView).setImageURI(uri)
-            seletedUri = uri
+            selectedUri = uri
         } else {
             Toast.makeText(this, "사진을 가져오지 못했습니다.", Toast.LENGTH_SHORT).show()
         }
@@ -83,14 +84,15 @@ class AddSellingActivity : AppCompatActivity() {
             // 입력된 값 가져오기
             val title = findViewById<EditText>(R.id.titleEditText).text.toString()
             val price = findViewById<EditText>(R.id.priceEditText).text.toString()
+            val contents = findViewById<EditText>(R.id.contentEditText).text.toString()
             val uId = auth.currentUser?.uid.orEmpty()
 
             // 업로드중 이미지가 있으면 업로드 과정을 추가함
-            if (seletedUri != null) {
-                val photoUri = seletedUri ?: return@setOnClickListener
+            if (selectedUri != null) {
+                val photoUri = selectedUri ?: return@setOnClickListener
                 uploadPhoto(photoUri,
                     successHandler = { url -> // 다운로드 url을 받아서 처리
-                        uploadSelling(uId, title, price, url)
+                        uploadSelling(uId, title, price, contents, url)
                     },
                     errorHandler = {
                         Toast.makeText(this, "게시글 업로드 실패", Toast.LENGTH_SHORT).show()
@@ -98,7 +100,7 @@ class AddSellingActivity : AppCompatActivity() {
                     })
             } else {
                 //이미지가 없는 경우 빈 문자열로 남김
-                uploadSelling(uId, title, price, "")
+                uploadSelling(uId, title, price, contents, "")
                 hideProgress()
             }
             // 모델 생성
@@ -106,13 +108,13 @@ class AddSellingActivity : AppCompatActivity() {
     }
 
     private fun uploadPhoto(uri: Uri, successHandler: (String) -> Unit, errorHandler: () -> Unit) {
-        var fileName = "${System.currentTimeMillis()}.png"
-        storage.reference.child("selling/photo").child(fileName)
+        val fileName = "${System.currentTimeMillis()}.png"
+        storage.reference.child("selling").child(fileName)
             .putFile(uri)
             .addOnCompleteListener {
                 if (it.isSuccessful) { // 업로드 과정 완료
                     // 다운로드 url 가져오기
-                    storage.reference.child("selling/photo").child(fileName).downloadUrl
+                    storage.reference.child("selling").child(fileName).downloadUrl
                         .addOnSuccessListener { uri ->
                             successHandler(uri.toString())
                         }.addOnFailureListener {
@@ -125,8 +127,8 @@ class AddSellingActivity : AppCompatActivity() {
             }
     }
 
-    private fun uploadSelling(uId: String, title: String, price: String, imageUrl: String) {
-        val model = SellingModelData(uId, title, System.currentTimeMillis(), "${price}원", imageUrl)
+    private fun uploadSelling(uId: String, title: String, price: String, contents: String, imageUrl: String) {
+        val model = SellingModelData(uId, title, System.currentTimeMillis(), "${price}원", contents, imageUrl)
 
         // 데이터베이스에 업로드
         sellingDB.push().setValue(model)
@@ -165,10 +167,20 @@ class AddSellingActivity : AppCompatActivity() {
 
     private fun showProgress() {
         findViewById<ProgressBar>(R.id.progressBar).isVisible = true
+        blockLayoutTouch()
     }
 
     private fun hideProgress() {
         findViewById<ProgressBar>(R.id.progressBar).isVisible = false
+        clearBlockLayoutTouch()
+    }
+    // 화면 터치 막기
+    private fun blockLayoutTouch() {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+    }
+    // 화면 터치 풀기
+    private fun clearBlockLayoutTouch() {
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
     }
 
     // 팝업 메시지 출력 (권한 혀용)

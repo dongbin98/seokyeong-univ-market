@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dbsh.skumarket.R
 import com.dbsh.skumarket.adapters.SellingAdapter
+import com.dbsh.skumarket.base.LinearLayoutManagerWrapper
 import com.dbsh.skumarket.databinding.FragmentHomeBinding
 import com.dbsh.skumarket.model.SellingModelData
 import com.google.android.material.snackbar.Snackbar
@@ -40,11 +41,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private lateinit var userDB: DatabaseReference
     private lateinit var sellingAdapter: SellingAdapter
 
+
     private val sellingList = mutableListOf<SellingModelData>()
 
     private val listener = object : ChildEventListener {
         override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-            TODO("Not yet implemented")
             val sellingModelData = snapshot.getValue(SellingModelData::class.java)
             sellingModelData ?: return
 
@@ -86,32 +87,26 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         sellingList.clear() // 리스트 초기화
 
-        sellingDB = Firebase.database.reference.child("SellingDB") // 디비 가져오기;
+        sellingDB = Firebase.database.reference.child("Selling") // 디비 가져오기;
+        userDB = Firebase.database.reference.child("User")
 
         initSellilngAdapter(view)
 
         initSellingRecyclerView()
 
         initButton(view)
-        // 데이터를 가져옴옴
+        // 데이터를 가져옴
         initListener()
 
-        setSellingSample()
     }
 
     private fun initSellingRecyclerView() {
         // activity 일 때는 this지만
-        // 프레그먼트의 경우는 context
+        // 프레그먼트의 경우는 context -> 오류가 있어서 바꿔야 함 클래스 자체를 포괄적으로 기본적을
         binding?:return
 
-        binding!!.sellingRecyclerView.layoutManager = LinearLayoutManager(context)
+        binding!!.sellingRecyclerView.layoutManager = LinearLayoutManagerWrapper(context)
         binding!!.sellingRecyclerView.adapter = sellingAdapter
-    }
-
-    private fun initSellingAdapter(view: View) {
-        sellingAdapter = SellingAdapter(onItemClicked = {sellingModelData ->
-
-        })
     }
 
     override fun onCreateView(
@@ -161,13 +156,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         sellingAdapter = SellingAdapter(onItemClicked = { sellingModelData ->
             if(auth.currentUser != null){
                 // 로그인 상태;
-                if(auth.currentUser?.uid != sellingModelData.uId){
-
-
-                }else{
-                    // 내가 올린 아이템 일때
-                    Snackbar.make(view, "내가 올린 아이템입니다.", Snackbar.LENGTH_LONG).show()
-                }
+                val intent = Intent(context, LoadSellingInfoActivity::class.java)
+                startActivity(intent)
             }else{
                 // 로그아웃 상태;
                 Snackbar.make(view, "로그인 후 사용해주세요", Snackbar.LENGTH_LONG).show()
@@ -192,8 +182,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private fun setSellingSample() {
         sellingAdapter.submitList(mutableListOf<SellingModelData>().apply {
-            add(SellingModelData("0", "AAA", 1000000, "5000원", ""))
-            add(SellingModelData("0", "BBB", 2000000, "10000원", ""))
+            add(SellingModelData("0", "AAA", 1000000, "5000원", "asdfasdf", ""))
+            add(SellingModelData("0", "BBB", 2000000, "10000원", "asdfasdf" , ""))
         })
     }
 }

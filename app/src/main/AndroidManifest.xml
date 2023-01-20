@@ -33,6 +33,7 @@
         <activity android:name=".views.AddSellingActivity"/>
         <activity android:name=".views.RegisterActivity"/>
         <activity android:name=".views.BottomActivity"/>
+        <activity android:name=".views.LoadSellingInfoActivity"/>
         <activity android:name=".views.ChatActivity"/>
     </application>
 
