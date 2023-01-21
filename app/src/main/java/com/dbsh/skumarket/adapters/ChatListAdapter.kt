@@ -11,6 +11,7 @@ class ChatListAdapter(data: ArrayList<ChatListDto>) : RecyclerView.Adapter<ChatL
     var mData: ArrayList<ChatListDto> = data
     private var mClickable: Boolean? = null
     private var itemClickListener: OnItemClickListener? = null
+    private var itemLongClickListener: OnItemLongClickListener? = null
 
     fun dataClear() {
         mData.clear()
@@ -25,8 +26,16 @@ class ChatListAdapter(data: ArrayList<ChatListDto>) : RecyclerView.Adapter<ChatL
         fun onItemClick(v: View, data: ChatListDto, position: Int)
     }
 
+    interface OnItemLongClickListener {
+        fun onItemLongClick(v: View, data: ChatListDto, position: Int)
+    }
+
     fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {
         this.itemClickListener = onItemClickListener
+    }
+
+    fun setOnItemLongClickListener(onItemLongClickListener: OnItemLongClickListener) {
+        this.itemLongClickListener = onItemLongClickListener
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
@@ -50,6 +59,10 @@ class ChatListAdapter(data: ArrayList<ChatListDto>) : RecyclerView.Adapter<ChatL
             if(position != RecyclerView.NO_POSITION) {
                 itemView.setOnClickListener {
                     itemClickListener?.onItemClick(itemView, item, position)
+                }
+                itemView.setOnLongClickListener {
+                    itemLongClickListener?.onItemLongClick(itemView, item, position)
+                    true
                 }
             }
         }

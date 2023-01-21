@@ -1,6 +1,8 @@
 package com.dbsh.skumarket.viewmodels
 
 import android.annotation.SuppressLint
+import android.content.ContentValues.TAG
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.dbsh.skumarket.model.ChatRoom
@@ -29,7 +31,7 @@ class ChatViewModel: ViewModel() {
     // 메시지 보내기
     @SuppressLint("SimpleDateFormat")
     fun sendMessage(chatRoomUid: String, message: String) {
-        println("########### sendMessage() ###########")
+        Log.d(TAG, "########### sendMessage(${chatRoomUid}, ${message}) ###########")
         val time = System.currentTimeMillis()
         val dateFormat = SimpleDateFormat("MM월dd일 hh:mm:ss")
         val curTime = dateFormat.format(Date(time)).toString()
@@ -50,7 +52,8 @@ class ChatViewModel: ViewModel() {
 
     // 채팅방 유무 체크
     fun checkChatRoom(opponent: String, message: String) {
-        println("########### checkChatRoom() ###########")
+        Log.d(TAG, "########### checkChatRoom(${opponent}, ${message}) ###########")
+
         var chatRoomUid: String? = null
         _opponent = opponent
         _message = message
@@ -77,7 +80,7 @@ class ChatViewModel: ViewModel() {
 
     // 채팅방 생성
     fun createChatRoom() {
-        println("########### createChatRoom() ###########")
+        Log.d(TAG, "########### createChatRoom() ###########")
 
         val chatRoom = ChatRoom()
         chatRoom.users[uid] = true
@@ -92,6 +95,8 @@ class ChatViewModel: ViewModel() {
 
     // 채팅 불러오기
     fun loadChat(roomId: String) {
+        Log.d(TAG, "########### loadChat(${roomId}) ###########")
+
         chatRef.child("chatRooms").child(roomId)
             .addValueEventListener(object: ValueEventListener{
                 override fun onDataChange(snapshot: DataSnapshot) {

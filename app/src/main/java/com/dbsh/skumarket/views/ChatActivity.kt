@@ -1,6 +1,7 @@
 package com.dbsh.skumarket.views
 
 import android.view.MenuItem
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.dbsh.skumarket.R
 import com.dbsh.skumarket.adapters.ChatAdapter
 import com.dbsh.skumarket.base.BaseActivity
@@ -15,7 +16,7 @@ class ChatActivity: BaseActivity<ActivityChatBinding>(R.layout.activity_chat) {
 
     private lateinit var viewModel: ChatViewModel
     private lateinit var adapter: ChatAdapter
-    lateinit var chatList: ArrayList<Chat>
+    private var chatList = mutableListOf<Chat>()
     private val auth = Firebase.auth
     private val uid = auth.currentUser?.uid
 
@@ -26,9 +27,8 @@ class ChatActivity: BaseActivity<ActivityChatBinding>(R.layout.activity_chat) {
         }
 
         chatList = ArrayList()
-        adapter = ChatAdapter(chatList, uid.toString())
+        adapter = ChatAdapter(chatList as ArrayList<Chat>, uid.toString())
         adapter.apply {
-
         }
 
         // 툴바
@@ -38,13 +38,20 @@ class ChatActivity: BaseActivity<ActivityChatBinding>(R.layout.activity_chat) {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = ""
 
-        binding.chatRecyclerview.adapter = adapter
-        binding.chatRecyclerview.layoutManager = LinearLayoutManagerWrapper(this)
-        binding.chatRecyclerview.scrollToPosition(adapter.itemCount-1)
+//        binding.chatRecyclerview.adapter = adapter
+//        binding.chatRecyclerview.layoutManager = LinearLayoutManagerWrapper(this)
+//        binding.chatRecyclerview.scrollToPosition(adapter.itemCount-1)
+
+        binding.chatRecyclerview.apply {
+            itemAnimator = null
+            adapter = this@ChatActivity.adapter
+            layoutManager = LinearLayoutManagerWrapper(this@ChatActivity)
+            scrollToPosition(this@ChatActivity.adapter.itemCount-1)
+        }
 
         // 채팅방 로드
         val roomId = intent.getStringExtra("roomId").toString()
-        viewModel.loadChat(roomId.toString())
+        viewModel.loadChat(roomId)
 
         // 채팅 보내기
         binding.chatSend.setOnClickListener {
