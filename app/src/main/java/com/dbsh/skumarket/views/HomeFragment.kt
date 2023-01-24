@@ -44,12 +44,12 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private val listener = object : ChildEventListener {
         override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-            TODO("Not yet implemented")
-            val sellingModelData = snapshot.getValue(SellingModelData::class.java)
-            sellingModelData ?: return
-
-            sellingList.add(sellingModelData) // 리스트에 새로운 항목을 더함
-            sellingAdapter.submitList(sellingList) // 어댑터 리스트 등록
+//            TODO("Not yet implemented")
+//            val sellingModelData = snapshot.getValue(SellingModelData::class.java)
+//            sellingModelData ?: return
+//
+//            sellingList.add(sellingModelData) // 리스트에 새로운 항목을 더함
+//            sellingAdapter.submitList(sellingList) // 어댑터 리스트 등록
         }
 
         override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {}

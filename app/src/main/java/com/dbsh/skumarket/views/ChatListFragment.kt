@@ -68,6 +68,10 @@ class ChatListFragment : BaseFragment<FragmentChatListBinding>(R.layout.fragment
                 adapter.notifyDataSetChanged()
             }
         }
+
+        viewModel.deleteSignal.observe(this) {
+            viewModel.loadChatRoom()
+        }
     }
 
     fun showDialog(roomId: String, opponent: String) {

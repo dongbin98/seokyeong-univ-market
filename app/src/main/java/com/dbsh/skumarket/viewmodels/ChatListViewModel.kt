@@ -11,30 +11,32 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 class ChatListViewModel : ViewModel() {
     var chatList: MutableLiveData<ArrayList<ChatListDto>> = MutableLiveData()
+    var deleteSignal: MutableLiveData<String> = MutableLiveData();
     private val auth = Firebase.auth
     private val chatRef = Firebase.database.reference.child("ChatRoom")
     private val userRef = Firebase.database.reference.child("User")
     private val uid = auth.currentUser?.uid
 
+    val database = Firebase.database
+
     fun loadChatRoom() {
         Log.d(ContentValues.TAG, "########### loadChatRoom() ###########")
 
         val dataList = ArrayList<ChatListDto>()
-
+        var noData = true;
         chatRef.child("chatRooms").orderByChild("users/$uid").equalTo(true)
             .addValueEventListener(object: ValueEventListener{
             override fun onCancelled(error: DatabaseError) {
-                chatList.value = dataList
             }
 
             override fun onDataChange(snapshot: DataSnapshot) {
-
+                dataList.clear()
+                noData = false;
                 for(chatRoom in snapshot.children) {
                     println("chatRoom = $chatRoom")
 
@@ -50,7 +52,6 @@ class ChatListViewModel : ViewModel() {
                                     println("대화상대 : $opponentName")
 
                                     for(chat in chatRoom.child("messages").children) {
-//                                        println("messasge in data = $chat")
                                         lastChat = ChatListDto(chatRoomKey, chat.child("message").value.toString(), chat.child("time").value.toString(), opponentName.toString())
                                     }
 
@@ -69,6 +70,9 @@ class ChatListViewModel : ViewModel() {
                 }
             }
         })
+        if(noData) {
+            chatList.value = dataList
+        }
     }
 
     // 채팅방 나가기
@@ -76,8 +80,9 @@ class ChatListViewModel : ViewModel() {
         Log.d(ContentValues.TAG, "########### deleteChatRoom(${roomId}) ###########")
         val map = HashMap<String, Boolean>();
         map[uid.toString()] = false
-        chatRef.child("chatRooms").child(roomId).child("users").updateChildren(map as Map<String, Any>).addOnCompleteListener {
-            loadChatRoom()
+        chatRef.child("chatRooms").child(roomId).child("users").updateChildren(map as Map<String, Any>).addOnSuccessListener {
+            println("삭제완료")
+            deleteSignal.value = "S";
         }
     }
 }
