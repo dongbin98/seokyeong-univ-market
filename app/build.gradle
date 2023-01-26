@@ -83,4 +83,6 @@ dependencies {
     // 로티 라이브러리 사용
     def lottieVersion = '3.7.0'
     implementation "com.airbnb.android:lottie:$lottieVersion"
+    // Circle ImageView
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
 }

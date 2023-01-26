@@ -5,16 +5,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.dbsh.skumarket.databinding.ItemChatBinding
-import com.dbsh.skumarket.databinding.ItemChatListBinding
 import com.dbsh.skumarket.model.Chat
-import com.dbsh.skumarket.model.ChatListDto
 
-class ChatAdapter(data: ArrayList<Chat>) : RecyclerView.Adapter<ChatAdapter.ListViewHolder>() {
-    var mData: ArrayList<Chat> = data
+class ChatAdapter(data: ArrayList<Chat>, uid: String) : RecyclerView.Adapter<ChatAdapter.ListViewHolder>() {
+    private var _data: ArrayList<Chat> = data
+    private var _uid = uid
     private var mClickable: Boolean? = null
 
     fun dataClear() {
-        mData.clear()
+        _data.clear()
     }
 
     // 대화목록 클릭 처리부
@@ -32,16 +31,41 @@ class ChatAdapter(data: ArrayList<Chat>) : RecyclerView.Adapter<ChatAdapter.List
     }
 
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
-        holder.bind(mData[position])
+        holder.bind(_data[position])
     }
 
     override fun getItemCount(): Int {
-        return mData.size
+        return _data.size
     }
 
-    class ListViewHolder(private val binding: ItemChatBinding): RecyclerView.ViewHolder(binding.root) {
+    inner class ListViewHolder(private val binding: ItemChatBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Chat) {
             binding.chat = item
+            if(item.uid.equals(_uid)) {
+                binding.chatMyNickName.visibility = View.VISIBLE
+                binding.chatMyTime.visibility = View.VISIBLE
+                binding.chatMyBlock.visibility = View.VISIBLE
+
+                binding.chatOtherProfileImage.visibility = View.GONE
+                binding.chatOtherNickName.visibility = View.GONE
+                binding.chatOtherTime.visibility = View.GONE
+                binding.chatOtherBlock.visibility = View.GONE
+
+                binding.chatMyImage.visibility = View.GONE
+                binding.chatOtherImage.visibility = View.GONE
+            } else {
+                binding.chatMyNickName.visibility = View.GONE
+                binding.chatMyTime.visibility = View.GONE
+                binding.chatMyBlock.visibility = View.GONE
+
+                binding.chatOtherProfileImage.visibility = View.VISIBLE
+                binding.chatOtherNickName.visibility = View.VISIBLE
+                binding.chatOtherTime.visibility = View.VISIBLE
+                binding.chatOtherBlock.visibility = View.VISIBLE
+
+                binding.chatMyImage.visibility = View.GONE
+                binding.chatOtherImage.visibility = View.GONE
+            }
         }
     }
 }
