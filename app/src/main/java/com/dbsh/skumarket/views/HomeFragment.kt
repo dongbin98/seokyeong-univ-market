@@ -104,7 +104,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         // activity 일 때는 this지만
         // 프레그먼트의 경우는 context -> 오류가 있어서 바꿔야 함 클래스 자체를 포괄적으로 기본적을
         binding?:return
-
         binding!!.sellingRecyclerView.layoutManager = LinearLayoutManagerWrapper(context)
         binding!!.sellingRecyclerView.adapter = sellingAdapter
     }
