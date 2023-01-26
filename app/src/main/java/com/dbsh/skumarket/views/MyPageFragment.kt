@@ -1,60 +1,96 @@
 package com.dbsh.skumarket.views
 
-import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.app.Activity.RESULT_OK
+import android.content.Intent
+import android.net.Uri
+import android.provider.MediaStore
+import android.view.WindowManager
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.view.isVisible
+import com.bumptech.glide.Glide
 import com.dbsh.skumarket.R
+import com.dbsh.skumarket.base.BaseFragment
+import com.dbsh.skumarket.databinding.FragmentMyPageBinding
+import com.dbsh.skumarket.viewmodels.MyPageViewModel
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+class MyPageFragment: BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_page) {
 
-/**
- * A simple [Fragment] subclass.
- * Use the [MyPageFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class MyPageFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    companion object{
+        const val TAG = "MyPage Fragment"
+        const val GALLERY_CODE = 10;
+    }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    private var selectedImage: Uri? = null
+
+    private lateinit var viewModel: MyPageViewModel
+    override fun init() {
+        viewModel = MyPageViewModel()
+        binding.apply {
+            viewModel = viewModel
+        }
+
+         viewModel.loadProfileImage()
+
+        // Result Callback 등록
+        val getResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode == RESULT_OK) {
+                if(it.data?.data != null) {
+                    selectedImage = it.data?.data
+                    Glide.with(requireContext()).load(selectedImage).circleCrop().into(binding.mypageProfileImg)
+                }
+            }
+        }
+
+        // 프로필 저장 버튼
+        binding.mypageProfileSave.setOnClickListener{
+            if(selectedImage != null) {
+                showProgressBar()
+                viewModel.saveProfile(selectedImage!!)
+            }
+        }
+
+        // 프로필 사진 추가
+        binding.mypageProfileImgAdd.setOnClickListener {
+            val intent = Intent(Intent.ACTION_PICK)
+            intent.type = MediaStore.Images.Media.CONTENT_TYPE
+            intent.run {
+                getResult.launch(this)
+            }
+        }
+
+        viewModel.myProfile.observe(this) {
+            if(it != null) {
+                Glide.with(requireContext()).load(it).circleCrop().into(binding.mypageProfileImg)
+            }
+            else
+                Glide.with(requireContext()).load(R.drawable.default_profile_img).circleCrop().into(binding.mypageProfileImg)
+        }
+
+        viewModel.isSaved.observe(this) {
+            if(it.equals("S"))
+                Toast.makeText(context, "저장되었습니다.", Toast.LENGTH_SHORT).show()
+            else
+                Toast.makeText(context, "저장에 실패했습니다.", Toast.LENGTH_SHORT).show()
+            hideProgressBar()
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_my_page, container, false)
+    private fun showProgressBar() {
+        blockLayoutTouch()
+        binding.mypageProfileLoading.isVisible = true
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment MyPageFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            MyPageFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    private fun hideProgressBar() {
+        clearBlockLayoutTouch()
+        binding.mypageProfileLoading.isVisible = false
+    }
+
+    private fun blockLayoutTouch() {
+        activity?.window?.addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+    }
+
+    private fun clearBlockLayoutTouch() {
+        activity?.window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
     }
 }

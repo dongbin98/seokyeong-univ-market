@@ -11,6 +11,7 @@ import com.dbsh.skumarket.model.User
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.database.ktx.getValue
@@ -24,7 +25,7 @@ class ChatViewModel: ViewModel() {
     private val auth by lazy { Firebase.auth }
     private val userRef = Firebase.database.reference.child("User")
     private val chatRef = Firebase.database.reference.child("ChatRoom")
-    private var uid: String = auth.uid.toString()
+    private val uid = auth.currentUser?.uid
     private lateinit var _opponent: String
     private lateinit var _message: String
 
@@ -36,7 +37,7 @@ class ChatViewModel: ViewModel() {
         val dateFormat = SimpleDateFormat("MM월dd일 hh:mm:ss")
         val curTime = dateFormat.format(Date(time)).toString()
 
-        userRef.child("users").child(uid).addListenerForSingleValueEvent(object: ValueEventListener {
+        userRef.child("users").child(uid.toString()).addValueEventListener(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val myName = snapshot.getValue<User>()?.name.toString()
 
@@ -58,7 +59,7 @@ class ChatViewModel: ViewModel() {
         _opponent = opponent
         _message = message
         chatRef.child("chatRooms").orderByChild("users/$uid").equalTo(true)
-            .addListenerForSingleValueEvent(object: ValueEventListener{
+            .addValueEventListener(object: ValueEventListener{
             override fun onDataChange(snapshot: DataSnapshot) {
                 for(item in snapshot.children) {
                     if(item.getValue<ChatRoom>()?.users?.containsKey(opponent) == true) {
@@ -83,7 +84,7 @@ class ChatViewModel: ViewModel() {
         Log.d(TAG, "########### createChatRoom() ###########")
 
         val chatRoom = ChatRoom()
-        chatRoom.users[uid] = true
+        chatRoom.users[uid.toString()] = true
         chatRoom.users[_opponent] = true
 
         val chatRoomUid: String? = chatRef.child("chatRooms").push().key

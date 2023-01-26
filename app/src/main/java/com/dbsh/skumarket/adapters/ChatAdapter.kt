@@ -44,19 +44,27 @@ class ChatAdapter(data: ArrayList<Chat>, uid: String) : RecyclerView.Adapter<Cha
             if(item.uid.equals(_uid)) {
                 binding.chatMyNickName.visibility = View.VISIBLE
                 binding.chatMyTime.visibility = View.VISIBLE
-                binding.chatMyMessage.visibility = View.VISIBLE
+                binding.chatMyBlock.visibility = View.VISIBLE
+
                 binding.chatOtherProfileImage.visibility = View.GONE
                 binding.chatOtherNickName.visibility = View.GONE
                 binding.chatOtherTime.visibility = View.GONE
-                binding.chatOtherMessage.visibility = View.GONE
+                binding.chatOtherBlock.visibility = View.GONE
+
+                binding.chatMyImage.visibility = View.GONE
+                binding.chatOtherImage.visibility = View.GONE
             } else {
                 binding.chatMyNickName.visibility = View.GONE
                 binding.chatMyTime.visibility = View.GONE
-                binding.chatMyMessage.visibility = View.GONE
+                binding.chatMyBlock.visibility = View.GONE
+
                 binding.chatOtherProfileImage.visibility = View.VISIBLE
                 binding.chatOtherNickName.visibility = View.VISIBLE
                 binding.chatOtherTime.visibility = View.VISIBLE
-                binding.chatOtherMessage.visibility = View.VISIBLE
+                binding.chatOtherBlock.visibility = View.VISIBLE
+
+                binding.chatMyImage.visibility = View.GONE
+                binding.chatOtherImage.visibility = View.GONE
             }
         }
     }

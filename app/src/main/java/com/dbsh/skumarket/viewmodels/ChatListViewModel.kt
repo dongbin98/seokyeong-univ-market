@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.dbsh.skumarket.model.ChatListDto
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -17,7 +18,7 @@ import kotlin.collections.HashMap
 class ChatListViewModel : ViewModel() {
     var chatList: MutableLiveData<ArrayList<ChatListDto>> = MutableLiveData()
     var deleteSignal: MutableLiveData<String> = MutableLiveData();
-    private val auth = Firebase.auth
+    private val auth by lazy { Firebase.auth }
     private val chatRef = Firebase.database.reference.child("ChatRoom")
     private val userRef = Firebase.database.reference.child("User")
     private val uid = auth.currentUser?.uid

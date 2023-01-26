@@ -38,10 +38,6 @@ class ChatActivity: BaseActivity<ActivityChatBinding>(R.layout.activity_chat) {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = ""
 
-//        binding.chatRecyclerview.adapter = adapter
-//        binding.chatRecyclerview.layoutManager = LinearLayoutManagerWrapper(this)
-//        binding.chatRecyclerview.scrollToPosition(adapter.itemCount-1)
-
         binding.chatRecyclerview.apply {
             itemAnimator = null
             adapter = this@ChatActivity.adapter
