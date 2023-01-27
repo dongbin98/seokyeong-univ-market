@@ -27,7 +27,6 @@ class MyPageFragment: BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_p
     override fun init() {
         viewModel = MyPageViewModel()
         binding.apply {
-            viewModel = viewModel
         }
 
          viewModel.loadProfileImage()
@@ -38,6 +37,8 @@ class MyPageFragment: BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_p
                 if(it.data?.data != null) {
                     selectedImage = it.data?.data
                     Glide.with(requireContext()).load(selectedImage).circleCrop().into(binding.mypageProfileImg)
+                } else {
+                    Glide.with(requireContext()).load(R.drawable.default_profile_img).circleCrop().into(binding.mypageProfileImg)
                 }
             }
         }
@@ -60,7 +61,7 @@ class MyPageFragment: BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_p
         }
 
         viewModel.myProfile.observe(this) {
-            if(it != null) {
+            if(it != "") {
                 Glide.with(requireContext()).load(it).circleCrop().into(binding.mypageProfileImg)
             }
             else

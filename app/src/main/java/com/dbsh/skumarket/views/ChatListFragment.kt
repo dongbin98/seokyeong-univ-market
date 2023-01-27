@@ -35,7 +35,9 @@ class ChatListFragment : BaseFragment<FragmentChatListBinding>(R.layout.fragment
                     println("채팅방 : ${data.roomId} 입장")
                     Intent(context, ChatActivity::class.java).apply {
                         putExtra("roomId", data.roomId)
-                        putExtra("opponent", data.otherOne) }.run { startActivity(this) }
+                        putExtra("opponent", data.otherOne)
+                        putExtra("opponentImage", data.otherImage)
+                    }.run { startActivity(this) }
                 }
             })
             setOnItemLongClickListener(object: ChatListAdapter.OnItemLongClickListener{

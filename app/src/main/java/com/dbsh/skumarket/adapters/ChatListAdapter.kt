@@ -4,6 +4,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.dbsh.skumarket.R
 import com.dbsh.skumarket.databinding.ItemChatListBinding
 import com.dbsh.skumarket.model.ChatListDto
 
@@ -54,6 +56,11 @@ class ChatListAdapter(data: ArrayList<ChatListDto>) : RecyclerView.Adapter<ChatL
     inner class ListViewHolder(private val binding: ItemChatListBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(item: ChatListDto) {
             binding.lastChat = item
+
+            if(item.otherImage.isNullOrBlank())
+                Glide.with(binding.root).load(R.drawable.default_profile_img).circleCrop().into(binding.chatListProfileImage)
+            else
+                Glide.with(binding.root).load(item.otherImage).circleCrop().into(binding.chatListProfileImage)
 
             val position = adapterPosition
             if(position != RecyclerView.NO_POSITION) {
