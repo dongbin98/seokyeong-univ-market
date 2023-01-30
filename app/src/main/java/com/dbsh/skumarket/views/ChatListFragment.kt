@@ -57,8 +57,12 @@ class ChatListFragment : BaseFragment<FragmentChatListBinding>(R.layout.fragment
         viewModel.loadChatRoom()
 
         viewModel.protoChatList.observe(viewLifecycleOwner) {
-            if(it != null) {
+            if(it.isNotEmpty()) {
                 viewModel.loadUserProfile(it)
+            } else {
+                chatRoomList.clear()
+                adapter.dataClear()
+                adapter.notifyDataSetChanged()
             }
         }
 

@@ -172,10 +172,12 @@ class ChatViewModel: ViewModel() {
                     val dataList = ArrayList<Chat>()
                     val myTime = snapshot.child("users").child(uid.toString()).child("time").value.toString()
                     println("\n$chatRoomId 입장시각 : $myTime\n")
+                    if(myTime == "out")
+                        return
 
                     for(chat in snapshot.child("messages").children) {
                         print("메시지 시각 : ${chat.child("time").value.toString()}\n입장한 시각 : ${myTime}의 비교\n")
-                        if(chat.child("time").value != "out") {
+                        if(chat.child("time").value.toString() != "out") {
                             if (Date(dateFormat.parse(chat.child("time").value.toString())!!.time).compareTo(Date(dateFormat.parse(myTime)!!.time)) >= 0) {
                                 println("메시지 시각이 더 늦으니 보여줄게요")
                                 dataList.add(chat.getValue<Chat>()!!)
