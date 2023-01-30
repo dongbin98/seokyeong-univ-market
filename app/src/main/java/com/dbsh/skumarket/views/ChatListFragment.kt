@@ -35,15 +35,15 @@ class ChatListFragment : BaseFragment<FragmentChatListBinding>(R.layout.fragment
                     println("채팅방 : ${data.roomId} 입장")
                     Intent(context, ChatActivity::class.java).apply {
                         putExtra("roomId", data.roomId)
-                        putExtra("opponent", data.otherOne)
-                        putExtra("opponentImage", data.otherImage)
+                        putExtra("opponent", data.opponentName)
+                        putExtra("opponentImage", data.opponentImage)
                     }.run { startActivity(this) }
                 }
             })
             setOnItemLongClickListener(object: ChatListAdapter.OnItemLongClickListener{
                 override fun onItemLongClick(v: View, data: ChatListDto, position: Int) {
                     Toast.makeText(context, "LongClick Event", Toast.LENGTH_SHORT).show()
-                    showDialog(data.roomId, data.otherOne)
+                    showDialog(data.roomId, data.opponentName)
 //                    viewModel.deleteChatRoom(data.roomId)
                 }
             })
@@ -56,7 +56,13 @@ class ChatListFragment : BaseFragment<FragmentChatListBinding>(R.layout.fragment
 
         viewModel.loadChatRoom()
 
-        viewModel.chatList.observe(this) { it ->
+        viewModel.protoChatList.observe(viewLifecycleOwner) {
+            if(it != null) {
+                viewModel.loadUserProfile(it)
+            }
+        }
+
+        viewModel.chatList.observe(viewLifecycleOwner) {
             if(it != null) {
                 chatRoomList.clear()
                 adapter.dataClear()

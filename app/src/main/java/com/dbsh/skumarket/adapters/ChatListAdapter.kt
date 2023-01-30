@@ -57,10 +57,10 @@ class ChatListAdapter(data: ArrayList<ChatListDto>) : RecyclerView.Adapter<ChatL
         fun bind(item: ChatListDto) {
             binding.lastChat = item
 
-            if(item.otherImage.isNullOrBlank())
+            if(item.opponentImage.isNullOrBlank())
                 Glide.with(binding.root).load(R.drawable.default_profile_img).circleCrop().into(binding.chatListProfileImage)
             else
-                Glide.with(binding.root).load(item.otherImage).circleCrop().into(binding.chatListProfileImage)
+                Glide.with(binding.root).load(item.opponentImage).circleCrop().into(binding.chatListProfileImage)
 
             val position = adapterPosition
             if(position != RecyclerView.NO_POSITION) {

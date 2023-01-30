@@ -37,7 +37,7 @@ class ChatViewModel: ViewModel() {
     fun sendMessage(chatRoomId: String, message: String) {
         Log.d(TAG, "########### sendMessage(${chatRoomId}, ${message}) ###########")
         val time = System.currentTimeMillis()
-        val dateFormat = SimpleDateFormat("MM월dd일 hh:mm:ss")
+        val dateFormat = SimpleDateFormat("MM월dd일 HH:mm:ss")
         val curTime = dateFormat.format(Date(time)).toString()
 
         userRef.child("users").child(uid.toString()).addValueEventListener(object: ValueEventListener {
@@ -76,7 +76,7 @@ class ChatViewModel: ViewModel() {
     fun sendImage(chatRoomId: String, image: Uri) {
         Log.d(TAG, "########### sendImage(${chatRoomId}) ###########")
         val time = System.currentTimeMillis()
-        val dateFormat = SimpleDateFormat("MM월dd일 hh:mm:ss")
+        val dateFormat = SimpleDateFormat("MM월dd일 HH:mm:ss")
         val curTime = dateFormat.format(Date(time)).toString()
 
         storageRef.child(chatRoomId).child(curTime).putFile(image).addOnSuccessListener {
@@ -147,7 +147,7 @@ class ChatViewModel: ViewModel() {
         Log.d(TAG, "########### createChatRoom() ###########")
 
         val time = System.currentTimeMillis()
-        val dateFormat = SimpleDateFormat("MM월dd일 hh:mm:ss")
+        val dateFormat = SimpleDateFormat("MM월dd일 HH:mm:ss")
         val curTime = dateFormat.format(Date(time)).toString()
 
         val chatRoom = ChatRoom()

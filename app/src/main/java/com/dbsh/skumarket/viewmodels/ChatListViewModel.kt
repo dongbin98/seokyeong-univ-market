@@ -16,6 +16,7 @@ import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 class ChatListViewModel : ViewModel() {
+    var protoChatList: MutableLiveData<ArrayList<ChatListDto>> = MutableLiveData()
     var chatList: MutableLiveData<ArrayList<ChatListDto>> = MutableLiveData()
     var deleteSignal: MutableLiveData<String> = MutableLiveData();
     private val auth by lazy { Firebase.auth }
@@ -35,45 +36,56 @@ class ChatListViewModel : ViewModel() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 Log.d(ContentValues.TAG, "chatRef.child(\"chatRooms\").orderByChild(\"users/$uid/join\").equalTo(true).addValueEventListener")
                 dataList.clear()
+                var lastChat: ChatListDto? = null
                 noData = false
 
+                // 내가 포함된 채팅방에서 채팅방 하나하나 개별 조회
                 for(chatRoom in snapshot.children) {
                     println("chatRoom = $chatRoom")
 
-                    var lastChat: ChatListDto? = null
                     val chatRoomKey = chatRoom.key.toString()
-                    var opponentName: String?
-                    var opponentImage: String?
+                    var chatRoomOtherId = ""
+                    for(user in chatRoom.child("users").children) {
+                        if(user.key.toString() != uid.toString())
+                            chatRoomOtherId = user.key.toString()
+                    }
                     var lastMessage = ""
                     var lastChatTime = ""
 
-                    for (user in chatRoom.child("users").children) {
-                        if (user.key.toString() != uid) {
-                            userRef.child("users").child(user.key.toString()).addListenerForSingleValueEvent(object: ValueEventListener{
-                                override fun onDataChange(snapshot: DataSnapshot) {
-                                    Log.d(ContentValues.TAG, "userRef.child(\"users\").child(user.key.toString()).addValueEventListener")
-                                    opponentName = snapshot.child("name").value.toString()
-                                    opponentImage = snapshot.child("profileImage").value.toString().ifBlank { null }
-
-                                    for(chat in chatRoom.child("messages").children) {
-                                        lastMessage = chat.child("message").value.toString().ifBlank { "사진을 업로드했습니다" }
-                                        lastChatTime = chat.child("time").value.toString()
-                                    }
-                                    lastChat = ChatListDto(chatRoomKey, lastMessage, lastChatTime, opponentName!!, opponentImage)
-                                    dataList.add(lastChat!!)
-                                    chatList.value = dataList
-                                }
-
-                                override fun onCancelled(error: DatabaseError) {
-                                }
-                            })
-                        }
+                    for (chat in chatRoom.child("messages").children) {
+                        lastMessage = chat.child("message").value.toString().ifBlank { "사진을 업로드했습니다" }
+                        lastChatTime = chat.child("time").value.toString()
                     }
+                    lastChat = ChatListDto(chatRoomKey, lastMessage, lastChatTime, "", chatRoomOtherId, "")
+                    dataList.add(lastChat)
+                    println("dataList add")
                 }
+                protoChatList.value = dataList
             }
         })
         if(noData) {
-            chatList.value = dataList
+            protoChatList.value = dataList
+        }
+    }
+
+    fun loadUserProfile(dataList: ArrayList<ChatListDto>) {
+        for ((position, data) in dataList.withIndex()) {
+            val opponentId = data.opponentId
+            userRef.child("users").child(opponentId).addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    Log.d(ContentValues.TAG, "userRef.child(\"users\").child(user.key.toString()).addValueEventListener")
+                    val opponentName = snapshot.child("name").value.toString()
+                    val opponentImage = snapshot.child("profileImage").value.toString().ifBlank { null }
+
+                    dataList[position].opponentName = opponentName
+                    dataList[position].opponentImage = opponentImage
+                    println("dataList set")
+                    chatList.value = dataList
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                }
+            })
         }
     }
 
