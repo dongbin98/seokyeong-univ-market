@@ -93,7 +93,7 @@ class ChatListViewModel : ViewModel() {
     fun deleteChatRoom(roomId: String) {
         Log.d(ContentValues.TAG, "########### deleteChatRoom(${roomId}) ###########")
         val map = HashMap<String, Any>();
-        map[uid.toString()] = ChatUser(false, null)
+        map[uid.toString()] = ChatUser(false, "out")
         chatRef.child("chatRooms").child(roomId).child("users").updateChildren(map).addOnSuccessListener {
             println("삭제완료")
             deleteSignal.value = "S";

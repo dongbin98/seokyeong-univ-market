@@ -40,7 +40,7 @@ class ChatViewModel: ViewModel() {
         val dateFormat = SimpleDateFormat("MM월dd일 HH:mm:ss")
         val curTime = dateFormat.format(Date(time)).toString()
 
-        userRef.child("users").child(uid.toString()).addValueEventListener(object: ValueEventListener {
+        userRef.child("users").child(uid.toString()).addListenerForSingleValueEvent(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val myName = snapshot.getValue<User>()?.name.toString()
 
@@ -171,17 +171,18 @@ class ChatViewModel: ViewModel() {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val dataList = ArrayList<Chat>()
                     val myTime = snapshot.child("users").child(uid.toString()).child("time").value.toString()
-                    println("myTime = $myTime")
+                    println("\n$chatRoomId 입장시각 : $myTime\n")
 
                     for(chat in snapshot.child("messages").children) {
                         print("메시지 시각 : ${chat.child("time").value.toString()}\n입장한 시각 : ${myTime}의 비교\n")
-                        val compare = Date(dateFormat.parse(chat.child("time").value.toString())!!.time).compareTo(Date(dateFormat.parse(myTime)!!.time))
-                        if(compare > 0) {
-                            println("메시지 시각이 더 늦으니 보여줄게요")
-                            dataList.add(chat.getValue<Chat>()!!)
-//                            chat.getValue<Chat>()?.let {
-//                                dataList.add(it)
-//                            }
+                        if(chat.child("time").value != "out") {
+                            if (Date(dateFormat.parse(chat.child("time").value.toString())!!.time).compareTo(Date(dateFormat.parse(myTime)!!.time)) >= 0) {
+                                println("메시지 시각이 더 늦으니 보여줄게요")
+                                dataList.add(chat.getValue<Chat>()!!)
+                                //                            chat.getValue<Chat>()?.let {
+                                //                                dataList.add(it)
+                                //                            }
+                            }
                         }
                     }
                     chatList.value = dataList
