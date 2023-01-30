@@ -34,8 +34,10 @@ class ChatActivity: BaseActivity<ActivityChatBinding>(R.layout.activity_chat) {
             viewModel = viewModel
         }
 
-        // 프로필 사진 가져오기
+        // 방 정보 전달받음
+        val roomId = intent.getStringExtra("roomId").toString()
         val opponentImage = intent.getStringExtra("opponentImage").toString()
+        val opponent = intent.getStringExtra("opponent").toString()
 
         chatList = ArrayList()
         adapter = ChatAdapter(chatList as ArrayList<Chat>, uid.toString(), opponentImage)
@@ -43,7 +45,6 @@ class ChatActivity: BaseActivity<ActivityChatBinding>(R.layout.activity_chat) {
         }
 
         // 툴바
-        val opponent = intent.getStringExtra("opponent").toString()
         binding.chatOpponentName.text = opponent
         setSupportActionBar(binding.chatToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -57,7 +58,6 @@ class ChatActivity: BaseActivity<ActivityChatBinding>(R.layout.activity_chat) {
         }
 
         // 채팅방 로드
-        val roomId = intent.getStringExtra("roomId").toString()
         viewModel.loadChat(roomId)
 
         // Image Add Callback 등록

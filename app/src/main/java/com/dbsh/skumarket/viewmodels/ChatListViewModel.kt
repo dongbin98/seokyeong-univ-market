@@ -27,15 +27,16 @@ class ChatListViewModel : ViewModel() {
         Log.d(ContentValues.TAG, "########### loadChatRoom() ###########")
 
         val dataList = ArrayList<ChatListDto>()
-        var noData = true;
-        chatRef.child("chatRooms").orderByChild("users/$uid/join").equalTo(true)
-            .addValueEventListener(object: ValueEventListener{
+        var noData = true
+        chatRef.child("chatRooms").orderByChild("users/$uid/join").equalTo(true).addValueEventListener(object: ValueEventListener{
             override fun onCancelled(error: DatabaseError) {
             }
 
             override fun onDataChange(snapshot: DataSnapshot) {
+                Log.d(ContentValues.TAG, "chatRef.child(\"chatRooms\").orderByChild(\"users/$uid/join\").equalTo(true).addValueEventListener")
                 dataList.clear()
-                noData = false;
+                noData = false
+
                 for(chatRoom in snapshot.children) {
                     println("chatRoom = $chatRoom")
 
@@ -46,10 +47,11 @@ class ChatListViewModel : ViewModel() {
                     var lastMessage = ""
                     var lastChatTime = ""
 
-                    for(user in chatRoom.child("users").children) {
-                        if(user.key.toString() != uid) {
-                            userRef.child("users").child(user.key.toString()).addValueEventListener(object: ValueEventListener{
+                    for (user in chatRoom.child("users").children) {
+                        if (user.key.toString() != uid) {
+                            userRef.child("users").child(user.key.toString()).addListenerForSingleValueEvent(object: ValueEventListener{
                                 override fun onDataChange(snapshot: DataSnapshot) {
+                                    Log.d(ContentValues.TAG, "userRef.child(\"users\").child(user.key.toString()).addValueEventListener")
                                     opponentName = snapshot.child("name").value.toString()
                                     opponentImage = snapshot.child("profileImage").value.toString().ifBlank { null }
 

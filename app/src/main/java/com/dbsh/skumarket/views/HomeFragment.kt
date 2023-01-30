@@ -75,28 +75,28 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d("Yang", "onViewCreated")
-
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-
-        val fragmentHomeBinding = FragmentHomeBinding.bind(view)
-        binding = fragmentHomeBinding
-
-        sellingList.clear() // 리스트 초기화
-
-        sellingDB = Firebase.database.reference.child("Selling") // 디비 가져오기;
-        userDB = Firebase.database.reference.child("User")
-
-        initSellilngAdapter(view)
-
-        initSellingRecyclerView()
-
-        initButton(view)
-        // 데이터를 가져옴
-        initListener()
+//        Log.d("Yang", "onViewCreated")
+//
+//        arguments?.let {
+//            param1 = it.getString(ARG_PARAM1)
+//            param2 = it.getString(ARG_PARAM2)
+//        }
+//
+//        val fragmentHomeBinding = FragmentHomeBinding.bind(view)
+//        binding = fragmentHomeBinding
+//
+//        sellingList.clear() // 리스트 초기화
+//
+//        sellingDB = Firebase.database.reference.child("Selling") // 디비 가져오기;
+//        userDB = Firebase.database.reference.child("User")
+//
+//        initSellilngAdapter(view)
+//
+//        initSellingRecyclerView()
+//
+//        initButton(view)
+//        // 데이터를 가져옴
+//        initListener()
 
     }
 
@@ -166,18 +166,18 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         })
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-
-        sellingDB.removeEventListener(listener)
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    override fun onResume() {
-        super.onResume()
-
-        sellingAdapter.notifyDataSetChanged() // view 를 다시 그림
-    }
+//    override fun onDestroy() {
+//        super.onDestroy()
+//
+//        sellingDB.removeEventListener(listener)
+//    }
+//
+//    @SuppressLint("NotifyDataSetChanged")
+//    override fun onResume() {
+//        super.onResume()
+//
+//        sellingAdapter.notifyDataSetChanged() // view 를 다시 그림
+//    }
 
     private fun setSellingSample() {
         sellingAdapter.submitList(mutableListOf<SellingModelData>().apply {

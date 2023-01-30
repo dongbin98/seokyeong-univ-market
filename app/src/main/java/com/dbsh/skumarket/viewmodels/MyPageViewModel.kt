@@ -1,6 +1,8 @@
 package com.dbsh.skumarket.viewmodels
 
+import android.content.ContentValues
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.dbsh.skumarket.model.Chat
@@ -27,6 +29,7 @@ class MyPageViewModel: ViewModel() {
     fun loadProfileImage() {
         userRef.child("users").child(uid.toString()).addListenerForSingleValueEvent(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
+                Log.d(ContentValues.TAG, "userRef.child(\"users\").child(uid.toString()).addListenerForSingleValueEvent")
                 if (snapshot.child("profileImage").value.toString() == "")
                     myProfile.value = ""
                 else
@@ -48,6 +51,7 @@ class MyPageViewModel: ViewModel() {
                 userRef.child("users").child(uid.toString()).addListenerForSingleValueEvent(object:
                     ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
+                        Log.d(ContentValues.TAG, "userRef.child(\"users\").child(uid.toString()).addListenerForSingleValueEvent")
                         val map: HashMap<String, Any> = HashMap()
                         map["profileImage"] = it.toString()
                         userRef.child("users").child(uid.toString()).updateChildren(map)
