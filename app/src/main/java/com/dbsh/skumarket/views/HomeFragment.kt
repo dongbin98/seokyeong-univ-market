@@ -42,11 +42,12 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private lateinit var sellingAdapter: SellingAdapter
 
 
+
     private val sellingList = mutableListOf<SellingModelData>()
 
     private val listener = object : ChildEventListener {
         override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-            val sellingModelData = snapshot.getValue(SellingModelData::class.java)
+            val sellingModelData = snapshot.getValue<SellingModelData>()
             sellingModelData ?: return
 
             sellingList.add(sellingModelData) // 리스트에 새로운 항목을 더함
@@ -103,9 +104,15 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private fun initSellingRecyclerView() {
         // activity 일 때는 this지만
         // 프레그먼트의 경우는 context -> 오류가 있어서 바꿔야 함 클래스 자체를 포괄적으로 기본적을
+        val manager = LinearLayoutManager(context)
+
+        manager.reverseLayout = true
+        manager.stackFromEnd = true
+
         binding?:return
         binding!!.sellingRecyclerView.layoutManager = LinearLayoutManagerWrapper(context)
         binding!!.sellingRecyclerView.adapter = sellingAdapter
+        binding!!.sellingRecyclerView.layoutManager = manager
     }
 
     override fun onCreateView(
@@ -155,8 +162,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         sellingAdapter = SellingAdapter(onItemClicked = { sellingModelData ->
             if(auth.currentUser != null){
                 // 로그인 상태;
-                val intent = Intent(context, LoadSellingInfoActivity::class.java)
-                startActivity(intent)
+
             }else{
                 // 로그아웃 상태;
                 Snackbar.make(view, "로그인 후 사용해주세요", Snackbar.LENGTH_LONG).show()
@@ -181,8 +187,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private fun setSellingSample() {
         sellingAdapter.submitList(mutableListOf<SellingModelData>().apply {
-            add(SellingModelData("0", "AAA", 1000000, "5000원", "asdfasdf", ""))
-            add(SellingModelData("0", "BBB", 2000000, "10000원", "asdfasdf" , ""))
+            add(SellingModelData("0", "AAA", "1000000", "5000원", "asdfasdf", ""))
+            add(SellingModelData("0", "BBB", "2000000", "10000원", "asdfasdf" , ""))
         })
     }
 }

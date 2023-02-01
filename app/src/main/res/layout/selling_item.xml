@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <import type="java.util.HashMap"/>
+        <variable
+            name="Sell"
+            type="com.dbsh.skumarket.model.SellingModelData" />
+    </data>
+
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingStart="16dp"
     android:paddingTop="16dp"
-    android:paddingEnd="16dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:paddingEnd="16dp">
 
     <ImageView
         android:id="@+id/thumbnailImg"
@@ -28,8 +34,8 @@
         android:layout_marginStart="16dp"
         android:maxLines="2"
         android:textColor="@color/black"
+        android:text="@{Sell.title}"
         android:textSize="15dp"
-
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/thumbnailImg"
         app:layout_constraintTop_toTopOf="parent"/>
@@ -42,7 +48,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
         android:textSize="13dp"
-
+        android:text="@{Sell.posttime}"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/titleText"
         app:layout_constraintTop_toBottomOf="@id/titleText" />
@@ -53,9 +59,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
         android:textColor="@color/black"
+        android:text="@{Sell.price}"
         android:textSize="17dp"
         android:textStyle="bold"
-
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/titleText"
         app:layout_constraintTop_toBottomOf="@id/dateText" />
@@ -70,3 +76,4 @@
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

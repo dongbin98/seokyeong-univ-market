@@ -24,6 +24,8 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
+import java.text.SimpleDateFormat
+import java.util.*
 
 class AddSellingActivity : AppCompatActivity() {
     private var selectedUri: Uri? = null
@@ -128,7 +130,10 @@ class AddSellingActivity : AppCompatActivity() {
     }
 
     private fun uploadSelling(uId: String, title: String, price: String, contents: String, imageUrl: String) {
-        val model = SellingModelData(uId, title, System.currentTimeMillis(), "${price}원", contents, imageUrl)
+        val time = System.currentTimeMillis()
+        val dateFormat = SimpleDateFormat("MM월 DD일")
+        val curTime = dateFormat.format(Date(time)).toString()
+        val model = SellingModelData(uId, title, curTime, "${price}원", contents, imageUrl)
 
         // 데이터베이스에 업로드
         sellingDB.push().setValue(model)
