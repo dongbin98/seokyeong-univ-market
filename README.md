@@ -19,5 +19,4 @@ SeoKyeong University Market Android Native Application
 - `양승협`
   - 중고거래 게시판 구현 (Firebase Realtimebase)
   
-## 2. Main Architecture
-### 2. 1 MVVM Pattern Architecture
+## 더 공부하고 진행하기 위해 프로젝트 잠정 중단
