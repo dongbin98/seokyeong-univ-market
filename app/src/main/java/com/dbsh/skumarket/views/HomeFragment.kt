@@ -1,14 +1,11 @@
 package com.dbsh.skumarket.views
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.fragment.app.Fragment
 import com.dbsh.skumarket.R
 import com.dbsh.skumarket.adapters.SellingAdapter
 import com.dbsh.skumarket.base.LinearLayoutManagerWrapper
@@ -21,7 +18,6 @@ import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.ktx.database
 import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
 
@@ -41,7 +37,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private lateinit var userDB: DatabaseReference
     private lateinit var sellingAdapter: SellingAdapter
 
-
     private val sellingList = mutableListOf<SellingModelData>()
 
     private val listener = object : ChildEventListener {
@@ -60,7 +55,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}
 
         override fun onCancelled(error: DatabaseError) {}
-
     }
 
     private val auth: FirebaseAuth by lazy {
@@ -97,20 +91,20 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 //        initButton(view)
 //        // 데이터를 가져옴
 //        initListener()
-
     }
 
     private fun initSellingRecyclerView() {
         // activity 일 때는 this지만
         // 프레그먼트의 경우는 context -> 오류가 있어서 바꿔야 함 클래스 자체를 포괄적으로 기본적을
-        binding?:return
+        binding ?: return
         binding!!.sellingRecyclerView.layoutManager = LinearLayoutManagerWrapper(context)
         binding!!.sellingRecyclerView.adapter = sellingAdapter
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_home, container, false)
@@ -143,26 +137,23 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private fun initButton(view: View) {
         // 내 물건 팔기 버튼;
         binding!!.addButton.setOnClickListener {
-            context?.let{
+            context?.let {
                 val intent = Intent(it, AddSellingActivity::class.java)
                 startActivity(intent)
             }
         }
     }
 
-
     private fun initSellilngAdapter(view: View) {
         sellingAdapter = SellingAdapter(onItemClicked = { sellingModelData ->
-            if(auth.currentUser != null){
+            if (auth.currentUser != null) {
                 // 로그인 상태;
                 val intent = Intent(context, LoadSellingInfoActivity::class.java)
                 startActivity(intent)
-            }else{
+            } else {
                 // 로그아웃 상태;
                 Snackbar.make(view, "로그인 후 사용해주세요", Snackbar.LENGTH_LONG).show()
             }
-
-
         })
     }
 
@@ -180,9 +171,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 //    }
 
     private fun setSellingSample() {
-        sellingAdapter.submitList(mutableListOf<SellingModelData>().apply {
-            add(SellingModelData("0", "AAA", 1000000, "5000원", "asdfasdf", ""))
-            add(SellingModelData("0", "BBB", 2000000, "10000원", "asdfasdf" , ""))
-        })
+        sellingAdapter.submitList(
+            mutableListOf<SellingModelData>().apply {
+                add(SellingModelData("0", "AAA", 1000000, "5000원", "asdfasdf", ""))
+                add(SellingModelData("0", "BBB", 2000000, "10000원", "asdfasdf", ""))
+            },
+        )
     }
 }

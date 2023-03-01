@@ -53,17 +53,18 @@ class ChatListAdapter(data: ArrayList<ChatListDto>) : RecyclerView.Adapter<ChatL
         return mData.size
     }
 
-    inner class ListViewHolder(private val binding: ItemChatListBinding): RecyclerView.ViewHolder(binding.root) {
+    inner class ListViewHolder(private val binding: ItemChatListBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: ChatListDto) {
             binding.lastChat = item
 
-            if(item.opponentImage.isNullOrBlank())
+            if (item.opponentImage.isNullOrBlank()) {
                 Glide.with(binding.root).load(R.drawable.default_profile_img).circleCrop().into(binding.chatListProfileImage)
-            else
+            } else {
                 Glide.with(binding.root).load(item.opponentImage).circleCrop().into(binding.chatListProfileImage)
+            }
 
             val position = adapterPosition
-            if(position != RecyclerView.NO_POSITION) {
+            if (position != RecyclerView.NO_POSITION) {
                 itemView.setOnClickListener {
                     itemClickListener?.onItemClick(itemView, item, position)
                 }

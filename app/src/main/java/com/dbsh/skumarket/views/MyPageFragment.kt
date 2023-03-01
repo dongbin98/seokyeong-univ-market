@@ -14,11 +14,11 @@ import com.dbsh.skumarket.base.BaseFragment
 import com.dbsh.skumarket.databinding.FragmentMyPageBinding
 import com.dbsh.skumarket.viewmodels.MyPageViewModel
 
-class MyPageFragment: BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_page) {
+class MyPageFragment : BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_page) {
 
-    companion object{
+    companion object {
         const val TAG = "MyPage Fragment"
-        const val GALLERY_CODE = 10;
+        const val GALLERY_CODE = 10
     }
 
     private var selectedImage: Uri? = null
@@ -29,12 +29,12 @@ class MyPageFragment: BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_p
         binding.apply {
         }
 
-         viewModel.loadProfileImage()
+        viewModel.loadProfileImage()
 
         // Result Callback 등록
         val getResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if (it.resultCode == RESULT_OK) {
-                if(it.data?.data != null) {
+                if (it.data?.data != null) {
                     selectedImage = it.data?.data
                     Glide.with(requireContext()).load(selectedImage).circleCrop().into(binding.mypageProfileImg)
                 } else {
@@ -44,8 +44,8 @@ class MyPageFragment: BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_p
         }
 
         // 프로필 저장 버튼
-        binding.mypageProfileSave.setOnClickListener{
-            if(selectedImage != null) {
+        binding.mypageProfileSave.setOnClickListener {
+            if (selectedImage != null) {
                 showProgressBar()
                 viewModel.saveProfile(selectedImage!!)
             }
@@ -61,18 +61,19 @@ class MyPageFragment: BaseFragment<FragmentMyPageBinding>(R.layout.fragment_my_p
         }
 
         viewModel.myProfile.observe(this) {
-            if(it != "") {
+            if (it != "") {
                 Glide.with(requireContext()).load(it).circleCrop().into(binding.mypageProfileImg)
-            }
-            else
+            } else {
                 Glide.with(requireContext()).load(R.drawable.default_profile_img).circleCrop().into(binding.mypageProfileImg)
+            }
         }
 
         viewModel.isSaved.observe(this) {
-            if(it.equals("S"))
+            if (it.equals("S")) {
                 Toast.makeText(context, "저장되었습니다.", Toast.LENGTH_SHORT).show()
-            else
+            } else {
                 Toast.makeText(context, "저장에 실패했습니다.", Toast.LENGTH_SHORT).show()
+            }
             hideProgressBar()
         }
     }

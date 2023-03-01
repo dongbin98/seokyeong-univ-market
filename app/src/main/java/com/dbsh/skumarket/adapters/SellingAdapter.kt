@@ -1,9 +1,5 @@
 package com.dbsh.skumarket.adapters
 
-
-
-import java.text.SimpleDateFormat
-import java.util.*
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -12,18 +8,18 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.dbsh.skumarket.databinding.SellingItemBinding
-
 import com.dbsh.skumarket.model.SellingModelData
+import java.text.SimpleDateFormat
+import java.util.*
 
 class SellingAdapter(val onItemClicked: (SellingModelData) -> Unit) : ListAdapter<SellingModelData, SellingAdapter.ViewHolder>(
-    diffUtil
+    diffUtil,
 ) {
     inner class ViewHolder(private val binding: SellingItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         @SuppressLint("SimpleDateFormat")
         fun bind(sellingModelData: SellingModelData) {
-
             // Long 형식에서 날짜로 바꾸기.
             val format = SimpleDateFormat("MM월 dd일")
             val date = Date(sellingModelData.posttime) // Long -> Date
@@ -42,7 +38,6 @@ class SellingAdapter(val onItemClicked: (SellingModelData) -> Unit) : ListAdapte
             binding.root.setOnClickListener {
                 onItemClicked(sellingModelData)
             }
-
         }
     }
 
@@ -51,8 +46,8 @@ class SellingAdapter(val onItemClicked: (SellingModelData) -> Unit) : ListAdapte
             SellingItemBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
-                false
-            )
+                false,
+            ),
         )
     }
 
@@ -70,9 +65,7 @@ class SellingAdapter(val onItemClicked: (SellingModelData) -> Unit) : ListAdapte
             override fun areContentsTheSame(oldItem: SellingModelData, newItem: SellingModelData): Boolean {
                 // equals 비교
                 return oldItem == newItem
-
             }
-
         }
     }
 }

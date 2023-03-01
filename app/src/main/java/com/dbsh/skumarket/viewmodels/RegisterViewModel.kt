@@ -1,17 +1,14 @@
 package com.dbsh.skumarket.viewmodels
 
-import android.content.ContentValues.TAG
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.dbsh.skumarket.model.User
+import com.dbsh.skumarket.api.SkuAuthService
 import com.dbsh.skumarket.model.RequestLoginData
 import com.dbsh.skumarket.model.ResponseLogin
+import com.dbsh.skumarket.model.User
 import com.dbsh.skumarket.repository.retrofit.RetrofitClient
-import com.dbsh.skumarket.api.SkuAuthService
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ktx.database
-import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import retrofit2.Call
 import retrofit2.Callback
@@ -29,9 +26,9 @@ class RegisterViewModel : ViewModel() {
         skuAuthService.getSkuAuth(RequestLoginData(id, pw, "password", "sku")).enqueue(object : Callback<ResponseLogin> {
             override fun onResponse(call: Call<ResponseLogin>, response: Response<ResponseLogin>) {
                 // 응답 수신 성공
-                if(response.isSuccessful) {
+                if (response.isSuccessful) {
                     // 로그인 성공
-                    if(response.body()?.rtnStatus.equals("S")) {
+                    if (response.body()?.rtnStatus.equals("S")) {
                         authData.value = response.body()
                         authState.value = "S"
                     }
@@ -57,7 +54,7 @@ class RegisterViewModel : ViewModel() {
         val auth = Firebase.auth
         val db = Firebase.database
         auth.createUserWithEmailAndPassword(email, pw).addOnCompleteListener {
-            if(it.isSuccessful) {
+            if (it.isSuccessful) {
                 try {
                     val user = auth.currentUser
                     val userId = user?.uid
@@ -70,7 +67,7 @@ class RegisterViewModel : ViewModel() {
                     e.printStackTrace()
                     registerState.value = "F"
                 }
-            } else if(it.exception?.message.isNullOrBlank()) {
+            } else if (it.exception?.message.isNullOrBlank()) {
                 registerState.value = "F"
             }
         }

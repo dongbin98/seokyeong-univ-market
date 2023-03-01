@@ -13,7 +13,7 @@ import com.dbsh.skumarket.model.ChatListDto
 import com.dbsh.skumarket.viewmodels.ChatListViewModel
 
 class ChatListFragment : BaseFragment<FragmentChatListBinding>(R.layout.fragment_chat_list) {
-    companion object{
+    companion object {
         const val TAG = "ChatList Fragment"
     }
 
@@ -30,7 +30,7 @@ class ChatListFragment : BaseFragment<FragmentChatListBinding>(R.layout.fragment
         // RecyclerView Setting
         adapter = ChatListAdapter(chatRoomList as ArrayList<ChatListDto>)
         adapter.apply {
-            setOnItemClickListener(object: ChatListAdapter.OnItemClickListener{
+            setOnItemClickListener(object : ChatListAdapter.OnItemClickListener {
                 override fun onItemClick(v: View, data: ChatListDto, position: Int) {
                     println("채팅방 : ${data.roomId} 입장")
                     Intent(context, ChatActivity::class.java).apply {
@@ -40,7 +40,7 @@ class ChatListFragment : BaseFragment<FragmentChatListBinding>(R.layout.fragment
                     }.run { startActivity(this) }
                 }
             })
-            setOnItemLongClickListener(object: ChatListAdapter.OnItemLongClickListener{
+            setOnItemLongClickListener(object : ChatListAdapter.OnItemLongClickListener {
                 override fun onItemLongClick(v: View, data: ChatListDto, position: Int) {
                     Toast.makeText(context, "LongClick Event", Toast.LENGTH_SHORT).show()
                     showDialog(data.roomId, data.opponentName)
@@ -57,17 +57,17 @@ class ChatListFragment : BaseFragment<FragmentChatListBinding>(R.layout.fragment
         viewModel.loadChatRoom()
 
         viewModel.protoChatList.observe(viewLifecycleOwner) {
-            if(it != null) {
+            if (it != null) {
                 viewModel.loadUserProfile(it)
             }
         }
 
         viewModel.chatList.observe(viewLifecycleOwner) {
-            if(it != null) {
+            if (it != null) {
                 chatRoomList.clear()
                 adapter.dataClear()
 //                adapter.notifyDataSetChanged()
-                for(chatRoom in it) {
+                for (chatRoom in it) {
                     chatRoomList.add(chatRoom)
                     chatRoomList.sortByDescending { it.lastDate }
 //                    adapter.notifyItemInserted(adapter.itemCount)

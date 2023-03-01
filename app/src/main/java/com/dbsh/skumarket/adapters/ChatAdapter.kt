@@ -7,8 +7,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.dbsh.skumarket.databinding.ItemChatBinding
 import com.dbsh.skumarket.model.Chat
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.storage
 
 class ChatAdapter(data: ArrayList<Chat>, uid: String, profileImage: String) : RecyclerView.Adapter<ChatAdapter.ListViewHolder>() {
     private var _data: ArrayList<Chat> = data
@@ -33,22 +31,25 @@ class ChatAdapter(data: ArrayList<Chat>, uid: String, profileImage: String) : Re
         return _data.size
     }
 
-    inner class ListViewHolder(private val binding: ItemChatBinding): RecyclerView.ViewHolder(binding.root) {
+    inner class ListViewHolder(private val binding: ItemChatBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Chat) {
             binding.chat = item
             var isImage = false
 
-            if(item.imageUrl.toString() != "") {
+            if (item.imageUrl.toString() != "") {
                 isImage = true
             }
 
-            if(item.uid == _uid) {
+            if (item.uid == _uid) {
                 // 읽었는지 체크
-                if(item.read) binding.chatMyRead.text = "읽음"
-                else binding.chatMyRead.text = "읽지않음"
+                if (item.read) {
+                    binding.chatMyRead.text = "읽음"
+                } else {
+                    binding.chatMyRead.text = "읽지않음"
+                }
 
                 // 이미지 또는 텍스트 체크
-                if(isImage) {
+                if (isImage) {
                     Glide.with(binding.root.context).load(item.imageUrl).into(binding.chatMyImage)
                     binding.chatMyImage.visibility = View.VISIBLE
                     binding.chatOtherImage.visibility = View.GONE
@@ -68,7 +69,7 @@ class ChatAdapter(data: ArrayList<Chat>, uid: String, profileImage: String) : Re
                 binding.chatOtherBlock.visibility = View.GONE
             } else {
                 // 이미지 또는 텍스트 체크
-                if(isImage) {
+                if (isImage) {
                     Glide.with(binding.root.context).load(item.imageUrl).into(binding.chatOtherImage)
                     binding.chatOtherImage.visibility = View.VISIBLE
                     binding.chatMyImage.visibility = View.GONE
@@ -79,7 +80,7 @@ class ChatAdapter(data: ArrayList<Chat>, uid: String, profileImage: String) : Re
                     binding.chatOtherText.visibility = View.VISIBLE
                 }
 
-                if(_profileImage != "") {
+                if (_profileImage != "") {
                     Glide.with(binding.root).load(_profileImage).circleCrop().into(binding.chatOtherProfileImage)
                 }
                 binding.chatMyNickName.visibility = View.GONE

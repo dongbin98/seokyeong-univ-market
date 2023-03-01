@@ -5,8 +5,6 @@ import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.dbsh.skumarket.model.Chat
-import com.dbsh.skumarket.model.User
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -14,10 +12,9 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 
-class MyPageViewModel: ViewModel() {
+class MyPageViewModel : ViewModel() {
     var isSaved: MutableLiveData<String> = MutableLiveData()
     var myProfile: MutableLiveData<String> = MutableLiveData()
     private val auth by lazy { Firebase.auth }
@@ -27,13 +24,14 @@ class MyPageViewModel: ViewModel() {
     private val storageRef = storage.reference.child("profile")
 
     fun loadProfileImage() {
-        userRef.child("users").child(uid.toString()).addListenerForSingleValueEvent(object: ValueEventListener {
+        userRef.child("users").child(uid.toString()).addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 Log.d(ContentValues.TAG, "userRef.child(\"users\").child(uid.toString()).addListenerForSingleValueEvent")
-                if (snapshot.child("profileImage").value.toString() == "")
+                if (snapshot.child("profileImage").value.toString() == "") {
                     myProfile.value = ""
-                else
+                } else {
                     myProfile.value = snapshot.child("profileImage").value.toString()
+                }
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -48,7 +46,7 @@ class MyPageViewModel: ViewModel() {
             // 업로드 성공 시 해당 이미지 다운로드
             storageRef.child(uid.toString()).child("profile").downloadUrl.addOnSuccessListener {
                 // 다운받은 Uri 데이터베이스에 저장
-                userRef.child("users").child(uid.toString()).addListenerForSingleValueEvent(object:
+                userRef.child("users").child(uid.toString()).addListenerForSingleValueEvent(object :
                     ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         Log.d(ContentValues.TAG, "userRef.child(\"users\").child(uid.toString()).addListenerForSingleValueEvent")

@@ -7,7 +7,7 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import com.dbsh.skumarket.databinding.DialogChatRoomOutBinding
 
-class ChatRoomOutDialog(context: Context, var opponent: String, private val okCallBack: (String) -> Unit): Dialog(context) {
+class ChatRoomOutDialog(context: Context, var opponent: String, private val okCallBack: (String) -> Unit) : Dialog(context) {
     private lateinit var binding: DialogChatRoomOutBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {

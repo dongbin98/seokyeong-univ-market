@@ -40,9 +40,9 @@ class AddSellingActivity : AppCompatActivity() {
         Firebase.database.reference.child("Selling")
     }
 
-    private val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri->
+    private val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
 
-        if(uri != null) {
+        if (uri != null) {
             // 사진을 정상적으로 가져왔을때
             findViewById<ImageView>(R.id.photoImageView).setImageURI(uri)
             selectedUri = uri
@@ -60,7 +60,7 @@ class AddSellingActivity : AppCompatActivity() {
             when {
                 ContextCompat.checkSelfPermission(
                     this,
-                    android.Manifest.permission.READ_EXTERNAL_STORAGE
+                    android.Manifest.permission.READ_EXTERNAL_STORAGE,
                 ) == PackageManager.PERMISSION_GRANTED -> { // 권한을 가지고 있는 경우;
                     startContentProvider()
                 }
@@ -72,11 +72,10 @@ class AddSellingActivity : AppCompatActivity() {
                     // 권한 요청
                     requestPermissions(
                         arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),
-                        1010
+                        1010,
                     )
                 }
             }
-
         }
         // 게시글 등록 버튼
         findViewById<Button>(R.id.submitButton).setOnClickListener {
@@ -90,16 +89,18 @@ class AddSellingActivity : AppCompatActivity() {
             // 업로드중 이미지가 있으면 업로드 과정을 추가함
             if (selectedUri != null) {
                 val photoUri = selectedUri ?: return@setOnClickListener
-                uploadPhoto(photoUri,
+                uploadPhoto(
+                    photoUri,
                     successHandler = { url -> // 다운로드 url을 받아서 처리
                         uploadSelling(uId, title, price, contents, url)
                     },
                     errorHandler = {
                         Toast.makeText(this, "게시글 업로드 실패", Toast.LENGTH_SHORT).show()
                         hideProgress()
-                    })
+                    },
+                )
             } else {
-                //이미지가 없는 경우 빈 문자열로 남김
+                // 이미지가 없는 경우 빈 문자열로 남김
                 uploadSelling(uId, title, price, contents, "")
                 hideProgress()
             }
@@ -141,7 +142,7 @@ class AddSellingActivity : AppCompatActivity() {
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
-        grantResults: IntArray
+        grantResults: IntArray,
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
@@ -174,13 +175,15 @@ class AddSellingActivity : AppCompatActivity() {
         findViewById<ProgressBar>(R.id.progressBar).isVisible = false
         clearBlockLayoutTouch()
     }
+
     // 화면 터치 막기
     private fun blockLayoutTouch() {
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
     }
+
     // 화면 터치 풀기
     private fun clearBlockLayoutTouch() {
-        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
     }
 
     // 팝업 메시지 출력 (권한 혀용)
@@ -194,5 +197,4 @@ class AddSellingActivity : AppCompatActivity() {
             .create()
             .show()
     }
-
 }
