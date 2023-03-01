@@ -78,6 +78,8 @@ class ChatListViewModel : ViewModel() {
                     val opponentName = snapshot.child("name").value.toString()
                     val opponentImage = snapshot.child("profileImage").value.toString().ifBlank { null }
 
+                    println("id : $opponentId 님의 이름은 $opponentName")
+
                     dataList[position].opponentName = opponentName
                     dataList[position].opponentImage = opponentImage
                     println("dataList set")
