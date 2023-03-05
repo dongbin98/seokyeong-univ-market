@@ -10,5 +10,5 @@ import retrofit2.http.POST
 interface SkuAuthService {
     @Headers("Accept: application/json", "content-type: application/json")
     @POST("auth2/login.sku")
-    fun getSkuAuth(@Body requestLoginData : RequestLoginData): Call<ResponseLogin>
+    fun getSkuAuth(@Body requestLoginData: RequestLoginData): Call<ResponseLogin>
 }

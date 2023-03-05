@@ -6,7 +6,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
-class LoginViewModel: ViewModel() {
+class LoginViewModel : ViewModel() {
     var loginState: MutableLiveData<String> = MutableLiveData()
     var loginUser: MutableLiveData<FirebaseUser> = MutableLiveData()
 
@@ -15,7 +15,7 @@ class LoginViewModel: ViewModel() {
         println(email)
         println(pw)
         auth.signInWithEmailAndPassword(email, pw).addOnCompleteListener {
-            if(it.isSuccessful) {
+            if (it.isSuccessful) {
                 loginUser.value = auth.currentUser
                 loginState.value = "S"
             } else {

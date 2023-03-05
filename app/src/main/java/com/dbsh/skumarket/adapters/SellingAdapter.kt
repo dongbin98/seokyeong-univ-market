@@ -1,9 +1,5 @@
 package com.dbsh.skumarket.adapters
 
-
-
-import java.text.SimpleDateFormat
-import java.util.*
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.view.LayoutInflater
@@ -16,14 +12,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.dbsh.skumarket.R
 import com.dbsh.skumarket.databinding.SellingItemBinding
-
 import com.dbsh.skumarket.model.SellingModelData
 import com.dbsh.skumarket.views.LoadSellingInfoActivity
 
 
-
 class SellingAdapter(val onItemClicked: (SellingModelData) -> Unit) : ListAdapter<SellingModelData, SellingAdapter.ViewHolder>(
-    diffUtil
+    diffUtil,
 ) {
     inner class ViewHolder(private val binding: SellingItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -33,7 +27,6 @@ class SellingAdapter(val onItemClicked: (SellingModelData) -> Unit) : ListAdapte
         private val txtImg: ImageView = itemView.findViewById(R.id.thumbnailImg)
         @SuppressLint("SimpleDateFormat", "SuspiciousIndentation")
         fun bind(sellingModelData: SellingModelData) {
-
             // Long 형식에서 날짜로 바꾸기.
             txtTitle.text = sellingModelData.title
             txtPrice.text = sellingModelData.price
@@ -54,7 +47,6 @@ class SellingAdapter(val onItemClicked: (SellingModelData) -> Unit) : ListAdapte
                 intent.putExtra("data", sellingModelData);
                 intent.run { binding.root.context.startActivity(this)}
             }
-
         }
     }
 
@@ -63,8 +55,8 @@ class SellingAdapter(val onItemClicked: (SellingModelData) -> Unit) : ListAdapte
             SellingItemBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
-                false
-            )
+                false,
+            ),
         )
     }
 
@@ -82,9 +74,7 @@ class SellingAdapter(val onItemClicked: (SellingModelData) -> Unit) : ListAdapte
             override fun areContentsTheSame(oldItem: SellingModelData, newItem: SellingModelData): Boolean {
                 // equals 비교
                 return oldItem == newItem
-
             }
-
         }
     }
 }

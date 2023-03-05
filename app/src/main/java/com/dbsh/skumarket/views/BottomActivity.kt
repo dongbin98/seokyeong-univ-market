@@ -28,10 +28,10 @@ class BottomActivity : AppCompatActivity() {
             executePendingBindings()
 
             navigationView.setOnItemSelectedListener { item ->
-                when(item.itemId) {
+                when (item.itemId) {
                     R.id.calenderFragment -> setFragment(TAG_HOME, HomeFragment())
                     R.id.homeFragment -> setFragment(TAG_CHAT, ChatListFragment())
-                    R.id.myPageFragment-> setFragment(TAG_MY_PAGE, MyPageFragment())
+                    R.id.myPageFragment -> setFragment(TAG_MY_PAGE, MyPageFragment())
                 }
                 true
             }
@@ -40,11 +40,11 @@ class BottomActivity : AppCompatActivity() {
     }
 
     // 다른 프레그먼트 화면으로 이동하는 기능
-    private fun setFragment(tag: String, fragment: Fragment){
+    private fun setFragment(tag: String, fragment: Fragment) {
         val manager: FragmentManager = supportFragmentManager
         val fragTransaction = manager.beginTransaction()
 
-        if (manager.findFragmentByTag(tag) == null){
+        if (manager.findFragmentByTag(tag) == null) {
             fragTransaction.add(R.id.mainFrame, fragment, tag)
         }
 
@@ -52,11 +52,11 @@ class BottomActivity : AppCompatActivity() {
         val chatting = manager.findFragmentByTag(TAG_CHAT)
         val myPage = manager.findFragmentByTag(TAG_MY_PAGE)
 
-        if (home != null){
+        if (home != null) {
             fragTransaction.hide(home)
         }
 
-        if (chatting != null){
+        if (chatting != null) {
             fragTransaction.hide(chatting)
         }
 
@@ -65,23 +65,18 @@ class BottomActivity : AppCompatActivity() {
         }
 
         if (tag == TAG_HOME) {
-            if (home != null){
+            if (home != null) {
                 fragTransaction.show(home)
             }
-        }
-        else if (tag == TAG_CHAT) {
+        } else if (tag == TAG_CHAT) {
             if (chatting != null) {
                 fragTransaction.show(chatting)
             }
-        }
-
-        else if (tag == TAG_MY_PAGE){
-            if (myPage != null){
+        } else if (tag == TAG_MY_PAGE) {
+            if (myPage != null) {
                 fragTransaction.show(myPage)
             }
         }
         fragTransaction.commitAllowingStateLoss()
     }
 }
-
-
