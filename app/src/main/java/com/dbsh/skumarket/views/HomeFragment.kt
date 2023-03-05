@@ -188,7 +188,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private fun setSellingSample() {
         sellingAdapter.submitList(mutableListOf<SellingModelData>().apply {
             add(SellingModelData("0", "AAA", "1000000", "5000원", "asdfasdf", ""))
-            add(SellingModelData("0", "BBB", "2000000", "10000원", "asdfasdf" , ""))
+            add(SellingModelData("0", "BBB", "2000000", "10000원", "asdfasdf" ,""))
         })
     }
 }

@@ -5,19 +5,26 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import com.bumptech.glide.Glide
 import com.dbsh.skumarket.R
 import com.dbsh.skumarket.databinding.ActivitySellingInfoBinding
 import com.dbsh.skumarket.model.SellingModelData
 import com.dbsh.skumarket.viewmodels.LoadViewModel
 import com.dbsh.skumarket.viewmodels.RegisterViewModel
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_selling_info.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
+import java.security.AccessController.getContext
 
 class LoadSellingInfoActivity : AppCompatActivity() {
     private var mbinding: ActivitySellingInfoBinding? = null
     private val binding get() = mbinding!!
     private var isHearting: Boolean = false
+    val postKey = "post1"
+    val database = Firebase.database
+    val postRef = database.getReference("")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,8 +36,10 @@ class LoadSellingInfoActivity : AppCompatActivity() {
         binding.datetext.text = data!!.posttime
         binding.pricetext.text = data!!.price
         binding.infotext.text = data!!.contents
-        binding.nickname.text = data!!.uId
-        Glide.with(this).load(data.imageUrl).into(SellingImg)
+        binding.nickname.text = data!!.uId.toString()
+
+        Glide.with(this).load(data.imageUrl).into(binding.SellingImg)
+        Glide.with(this).load(R.drawable.default_profile_img).circleCrop().into(binding.profileImg)
     }
 
     fun onClickButton(view: View){
