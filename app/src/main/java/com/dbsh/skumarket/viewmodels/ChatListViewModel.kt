@@ -36,7 +36,7 @@ class ChatListViewModel : ViewModel() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 Log.d(ContentValues.TAG, "chatRef.child(\"chatRooms\").orderByChild(\"users/$uid/join\").equalTo(true).addValueEventListener")
                 dataList.clear()
-                var lastChat: ChatListDto? = null
+                var lastChat: ChatListDto?
                 noData = false
 
                 // 내가 포함된 채팅방에서 채팅방 하나하나 개별 조회
