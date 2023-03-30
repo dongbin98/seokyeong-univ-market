@@ -44,7 +44,7 @@ class ChatViewModel : ViewModel() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val myName = snapshot.getValue<User>()?.name.toString()
 
-                val chat = Chat(uid.toString(), message, "", curTime, myName, false)
+                val chat = Chat(uid.toString(), message, "", curTime, myName)
                 println("chatRoomUid = $chatRoomId")
                 chatRef.child("chatRooms").child(chatRoomId).child("messages").push().setValue(chat)
 
@@ -84,7 +84,7 @@ class ChatViewModel : ViewModel() {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         val myName = snapshot.getValue<User>()?.name.toString()
                         val myImage = it.toString()
-                        val chat = Chat(uid.toString(), "", myImage, curTime, myName, false)
+                        val chat = Chat(uid.toString(), "", myImage, curTime, myName)
                         chatRef.child("chatRooms").child(chatRoomId).child("messages").push().setValue(chat)
 
                         // 상대가 채팅방을 나간 경우 메시지 전송 시 다시 들어와지도록

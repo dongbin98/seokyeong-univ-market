@@ -40,17 +40,6 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintRight_toLeftOf="@id/chat_my_nick_name"/>
 
-        <TextView
-            android:id="@+id/chat_my_read"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="읽지 않음"
-            android:textColor="@color/orange_pressed"
-            android:textSize="12sp"
-            android:layout_marginRight="4dp"
-            app:layout_constraintRight_toLeftOf="@id/chat_my_block"
-            app:layout_constraintBottom_toBottomOf="@id/chat_my_block"/>
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/chat_my_block"
             android:layout_width="wrap_content"

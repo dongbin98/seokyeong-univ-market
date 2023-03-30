@@ -41,13 +41,6 @@ class ChatAdapter(data: ArrayList<Chat>, uid: String, profileImage: String) : Re
             }
 
             if (item.uid == _uid) {
-                // 읽었는지 체크
-                if (item.read) {
-                    binding.chatMyRead.text = "읽음"
-                } else {
-                    binding.chatMyRead.text = "읽지않음"
-                }
-
                 // 이미지 또는 텍스트 체크
                 if (isImage) {
                     Glide.with(binding.root.context).load(item.imageUrl).into(binding.chatMyImage)
