@@ -17,6 +17,18 @@ SeoKyeong University Market Android Native Application
   - 실시간 1:1 채팅방 구현 완료(채팅 읽음처리 제외, Firebase Realtimebase)
   
 - `양승협`
-  - 중고거래 게시판 구현  (Firebase Realtimebase)
+  - 중고거래 게시판 구현(Firebase Realtimebase)
   
-## 더 공부하고 진행하기 위해 프로젝트 잠정 중단
+### 2. Result
+`게시글(임시) 및 채팅
+<p align="left">
+  <image src="https://user-images.githubusercontent.com/77912766/228895611-86339746-9482-4f82-9a8e-4994d46c50fe.gif"/>
+  <image src="https://user-images.githubusercontent.com/77912766/228895643-c50a6432-f8f4-4b2a-a54d-501586667622.gif"/>
+</p>
+
+### 3. 향후 계획
+- 패키지 구조 변경
+- 생성자를 통한 ViewModel 생성 → ViewModel.ProviderOf를 통한 인스턴스 불러오기 처리 예정 (UI 변화에 유연하게)
+- BottomNavigation을 이용한 FragmentManager 처리 → AAC Navigation 처리 예정
+- 회원가입 시 Retrofit Callback 처리 → Retrofit + RxJava 처리 예정
+- Firebase Realtime Database Callback 처리 → Firebase + Retrofit 처리 예정
