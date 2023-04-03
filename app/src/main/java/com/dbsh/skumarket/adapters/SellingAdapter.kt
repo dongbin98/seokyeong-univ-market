@@ -12,8 +12,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.dbsh.skumarket.R
 import com.dbsh.skumarket.databinding.SellingItemBinding
-import com.dbsh.skumarket.model.SellingModelData
-import com.dbsh.skumarket.views.LoadSellingInfoActivity
+import com.dbsh.skumarket.api.model.SellingModelData
+import com.dbsh.skumarket.ui.post.LoadSellingInfoActivity
 
 
 class SellingAdapter(val onItemClicked: (SellingModelData) -> Unit) : ListAdapter<SellingModelData, SellingAdapter.ViewHolder>(

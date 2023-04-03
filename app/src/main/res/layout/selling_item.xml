@@ -4,7 +4,7 @@
         <import type="java.util.HashMap"/>
         <variable
             name="Sell"
-            type="com.dbsh.skumarket.model.SellingModelData" />
+            type="com.dbsh.skumarket.api.model.SellingModelData" />
     </data>
 
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"

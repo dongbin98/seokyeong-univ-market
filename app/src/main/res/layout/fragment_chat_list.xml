@@ -2,7 +2,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.dbsh.skumarket.viewmodels.ChatListViewModel" />
+            type="com.dbsh.skumarket.ui.chat.ChatListViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"

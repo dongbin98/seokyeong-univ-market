@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.dbsh.skumarket.databinding.ItemChatBinding
-import com.dbsh.skumarket.model.Chat
+import com.dbsh.skumarket.api.model.Chat
 
 class ChatAdapter(data: ArrayList<Chat>, uid: String, profileImage: String) : RecyclerView.Adapter<ChatAdapter.ListViewHolder>() {
     private var _data: ArrayList<Chat> = data

@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.dbsh.skumarket.R
 import com.dbsh.skumarket.databinding.ItemChatListBinding
-import com.dbsh.skumarket.model.ChatListDto
+import com.dbsh.skumarket.api.model.ChatListDto
 
 class ChatListAdapter(data: ArrayList<ChatListDto>) : RecyclerView.Adapter<ChatListAdapter.ListViewHolder>() {
     var mData: ArrayList<ChatListDto> = data

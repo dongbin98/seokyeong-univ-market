@@ -20,7 +20,7 @@
         tools:targetApi="33">
 
         <activity
-            android:name=".views.MainActivity"
+            android:name=".ui.login.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -32,11 +32,11 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-        <activity android:name=".views.AddSellingActivity"/>
-        <activity android:name=".views.RegisterActivity"/>
-        <activity android:name=".views.BottomActivity"/>
-        <activity android:name=".views.LoadSellingInfoActivity"/>
-        <activity android:name=".views.ChatActivity"/>
+        <activity android:name=".ui.post.AddSellingActivity"/>
+        <activity android:name=".ui.regist.RegisterActivity"/>
+        <activity android:name=".ui.main.BottomActivity"/>
+        <activity android:name=".ui.post.LoadSellingInfoActivity"/>
+        <activity android:name=".ui.chat.ChatActivity"/>
     </application>
 
 </manifest>

@@ -5,7 +5,7 @@
     <import type="java.util.HashMap"/>
     <variable
         name="chat"
-        type="com.dbsh.skumarket.model.Chat" />
+        type="com.dbsh.skumarket.api.model.Chat" />
 </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
