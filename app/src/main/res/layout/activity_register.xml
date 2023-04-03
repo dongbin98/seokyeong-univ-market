@@ -6,14 +6,14 @@
     <data>
         <variable
             name="viewModel"
-            type="com.dbsh.skumarket.ui.regist.RegisterViewModel" />
+            type="com.dbsh.skumarket.ui.register.RegisterViewModel" />
     </data>
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
-        tools:context=".ui.regist.RegisterActivity">
+        tools:context=".ui.register.RegisterActivity">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"

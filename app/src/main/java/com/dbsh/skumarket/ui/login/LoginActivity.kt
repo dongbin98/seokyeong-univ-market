@@ -4,11 +4,11 @@ import android.content.Intent
 import android.widget.Toast
 import com.dbsh.skumarket.R
 import com.dbsh.skumarket.base.BaseActivity
-import com.dbsh.skumarket.databinding.ActivityMainBinding
-import com.dbsh.skumarket.ui.main.BottomActivity
-import com.dbsh.skumarket.ui.regist.RegisterActivity
+import com.dbsh.skumarket.databinding.ActivityLoginBinding
+import com.dbsh.skumarket.ui.main.MainActivity
+import com.dbsh.skumarket.ui.register.RegisterActivity
 
-class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
+class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login) {
 
     private lateinit var viewModel: LoginViewModel
 
@@ -28,7 +28,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
         // 회원가입 이동
         binding.mainRegistAccount.setOnClickListener {
-            Intent(this@MainActivity, RegisterActivity::class.java).run { startActivity(this) }
+            Intent(this@LoginActivity, RegisterActivity::class.java).run { startActivity(this) }
         }
 
         // 비밀번호 찾기 이동
@@ -42,7 +42,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
                 println(it.toString())
                 if (it.equals("S")) {
                     Toast.makeText(this, "로그인 성공", Toast.LENGTH_SHORT).show()
-                    Intent(this@MainActivity, BottomActivity::class.java).run { startActivity(this) }
+                    Intent(this@LoginActivity, MainActivity::class.java).run { startActivity(this) }
                 } else {
                     Toast.makeText(this, "로그인 실패", Toast.LENGTH_SHORT).show()
                 }

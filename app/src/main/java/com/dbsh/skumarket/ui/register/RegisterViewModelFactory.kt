@@ -1,4 +1,4 @@
-package com.dbsh.skumarket.ui.regist
+package com.dbsh.skumarket.ui.register
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

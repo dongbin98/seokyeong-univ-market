@@ -1,4 +1,4 @@
-package com.dbsh.skumarket.ui.regist
+package com.dbsh.skumarket.ui.register
 
 import android.util.Log
 import android.widget.Toast
