@@ -3,6 +3,7 @@ package com.dbsh.skumarket.api
 import android.annotation.SuppressLint
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.security.cert.X509Certificate
 import javax.net.ssl.SSLContext
@@ -14,6 +15,7 @@ import javax.net.ssl.X509TrustManager
 
 fun provideSkuAuthApi(): SkuAuthApi = Retrofit.Builder()
     .baseUrl("https://sportal.skuniv.ac.kr/sportal/")
+    .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
     .addConverterFactory(GsonConverterFactory.create())
     .client(provideUnsafeOkHttpClient().build())
     .build()
