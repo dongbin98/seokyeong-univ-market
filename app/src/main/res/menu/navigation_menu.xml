@@ -2,12 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/calenderFragment"
+        android:id="@+id/homeFragment"
         android:title="홈"
         android:icon="@drawable/ic_home"/>
 
     <item
-        android:id="@+id/homeFragment"
+        android:id="@+id/chatListFragment"
         android:title="채팅"
         android:icon="@drawable/ic_chatting"/>
 
