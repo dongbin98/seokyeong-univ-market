@@ -28,5 +28,4 @@ SeoKyeong University Market Android Native Application
 
 ### 3. 향후 계획
 - BottomNavigation을 이용한 FragmentManager 처리 → AAC Navigation 처리(완료)
-- 회원가입 시 Retrofit Callback 처리 → Retrofit + RxJava 처리 예정
-- Firebase Realtime Database Callback 처리 → Firebase + Retrofit 처리 예정
+- 회원가입 시 Retrofit Callback 처리 → Retrofit + RxJava 처리(완료)
