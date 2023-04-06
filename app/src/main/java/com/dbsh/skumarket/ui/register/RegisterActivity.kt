@@ -8,6 +8,7 @@ import com.dbsh.skumarket.R
 import com.dbsh.skumarket.api.provideSkuAuthApi
 import com.dbsh.skumarket.base.BaseActivity
 import com.dbsh.skumarket.databinding.ActivityRegisterBinding
+import com.dbsh.skumarket.rx.AutoClearedDisposable
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 
@@ -18,13 +19,18 @@ class RegisterActivity : BaseActivity<ActivityRegisterBinding>(R.layout.activity
     lateinit var uid: String
     lateinit var name: String
     var isAuth: Boolean = false // 학생인증 여부
-    private val disposable = CompositeDisposable()
+    private val disposable = AutoClearedDisposable(this)
 
     override fun init() {
         viewModel = ViewModelProvider(this, viewModelFactory)[RegisterViewModel::class.java]
         binding.apply {
             viewModel = viewModel
         }
+
+        // 툴바
+        setSupportActionBar(binding.registerToolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.title = ""
 
         // 학생인증 버튼 클릭 이벤트처리
         binding.registerSkuAuth.setOnClickListener {
@@ -37,6 +43,7 @@ class RegisterActivity : BaseActivity<ActivityRegisterBinding>(R.layout.activity
         // 회원가입 버튼 클릭 이벤트처리
         binding.registerButton.setOnClickListener {
             if (isAuth) {
+                showProgress()
                 viewModel.signUp(
                     binding.registerId.text.toString(),
                     binding.registerPw.text.toString(),
@@ -75,33 +82,27 @@ class RegisterActivity : BaseActivity<ActivityRegisterBinding>(R.layout.activity
         disposable.add(viewModel.result
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
-                if (it != null) {
-                    uid = it.id.toString()
-                    name = it.korName.toString()
-                    Toast.makeText(this, "${it.korName}님 인증되었습니다", Toast.LENGTH_SHORT).show()
-                    binding.registerSkuAuth.setBackgroundResource(R.drawable.button_gray_radius_20)
-                    isAuth = true
-                    binding.registerSkuAuth.isClickable = false
-                    binding.registerSkuAuth.text = "인증완료"
-                }
+                uid = it.id.toString()
+                name = it.korName.toString()
+                Toast.makeText(this, "${it.korName}님 인증되었습니다", Toast.LENGTH_SHORT).show()
+                binding.registerSkuAuth.setBackgroundResource(R.drawable.button_gray_radius_20)
+                isAuth = true
+                binding.registerSkuId.isClickable = false
+                binding.registerSkuPw.isClickable = false
+                binding.registerSkuAuth.isClickable = false
+                binding.registerSkuAuth.text = "인증완료"
             })
 
         // 회원가입 처리
         viewModel.registerState.observe(this) {
             if (it != null) {
-                if (it.equals("S")) {
-                    Toast.makeText(this, "회원가입이 완료되었습니다", Toast.LENGTH_SHORT).show()
+                hideProgress()
+                Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+                if (it.equals("회원가입에 성공하였습니다.")) {
                     finish()
-                } else {
-                    Toast.makeText(this, "회원가입이 실패하였습니다", Toast.LENGTH_SHORT).show()
                 }
             }
         }
-    }
-
-    override fun onStop() {
-        super.onStop()
-        disposable.clear()
     }
 
     private fun showProgress() {
