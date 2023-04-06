@@ -14,13 +14,13 @@
 
                 android:width="1dp"
 
-                android:color="#5555FF" />
+                android:color="@color/dark_gray" />
 
             <corners android:radius="4dp"/>
 
             <solid
 
-                android:color="#FFFFFF" />
+                android:color="@color/white" />
 
         </shape>
 
@@ -40,13 +40,13 @@
 
                 android:width="1dp"
 
-                android:color="#EEEEEE" />
+                android:color="@color/gray" />
 
             <corners android:radius="4dp"/>
 
             <solid
 
-                android:color="#FFFFFF" />
+                android:color="@color/white" />
 
         </shape>
 

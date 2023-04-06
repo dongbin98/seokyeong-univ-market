@@ -14,7 +14,6 @@ import com.dbsh.skumarket.adapters.SellingAdapter
 import com.dbsh.skumarket.util.LinearLayoutManagerWrapper
 import com.dbsh.skumarket.databinding.FragmentHomeBinding
 import com.dbsh.skumarket.api.model.SellingModelData
-import com.dbsh.skumarket.ui.post.AddSellingActivity
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -26,24 +25,12 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [HomeFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private lateinit var sellingDB: DatabaseReference
     private lateinit var userDB: DatabaseReference
     private lateinit var sellingAdapter: SellingAdapter
-
-
-
     private val sellingList = mutableListOf<SellingModelData>()
 
     private val listener = object : ChildEventListener {
@@ -71,18 +58,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private var binding: FragmentHomeBinding? = null
 
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d("Yang", "onViewCreated")
-
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
 
         val fragmentHomeBinding = FragmentHomeBinding.bind(view)
         binding = fragmentHomeBinding
@@ -92,7 +70,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         sellingDB = Firebase.database.reference.child("Selling") // 디비 가져오기;
         userDB = Firebase.database.reference.child("User")
 
-        initSellilngAdapter(view)
+        initSellingAdapter(view)
 
         initSellingRecyclerView()
 
@@ -125,26 +103,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment HomeFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            HomeFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
-
     private fun initListener() {
         sellingDB.addChildEventListener(listener)
     }
@@ -153,44 +111,31 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         // 내 물건 팔기 버튼;
         binding!!.addButton.setOnClickListener {
             context?.let{
-                val intent = Intent(it, AddSellingActivity::class.java)
+                val intent = Intent(it, UploadPostActivity::class.java)
                 startActivity(intent)
             }
         }
     }
 
-
-    private fun initSellilngAdapter(view: View) {
-        sellingAdapter = SellingAdapter(onItemClicked = { sellingModelData ->
+    private fun initSellingAdapter(view: View) {
+        sellingAdapter = SellingAdapter(onItemClicked = {
             if(auth.currentUser != null){
                 // 로그인 상태;
-
             }else{
                 // 로그아웃 상태;
                 Snackbar.make(view, "로그인 후 사용해주세요", Snackbar.LENGTH_LONG).show()
             }
-
-
         })
     }
 
     override fun onDestroy() {
         super.onDestroy()
-
         sellingDB.removeEventListener(listener)
     }
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onResume() {
         super.onResume()
-
         sellingAdapter.notifyDataSetChanged() // view 를 다시 그림
-    }
-
-    private fun setSellingSample() {
-        sellingAdapter.submitList(mutableListOf<SellingModelData>().apply {
-            add(SellingModelData("0", "AAA", "1000000", "5000원", "asdfasdf", ""))
-            add(SellingModelData("0", "BBB", "2000000", "10000원", "asdfasdf" ,""))
-        })
     }
 }

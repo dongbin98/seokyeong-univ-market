@@ -20,17 +20,25 @@
             android:layout_width="match_parent"
             android:layout_height="0dp">
 
-            <TextView
-                android:id="@+id/register_skum_logo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="120dp"
-                android:text="서경당근 가입(가제)"
-                android:textColor="@color/orange"
-                android:textSize="36sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/register_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="@color/white"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="회원가입"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
+            </androidx.appcompat.widget.Toolbar>
+
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/register_sku_auth_area"
@@ -42,7 +50,7 @@
                 android:background="@drawable/edittext_white_radius_20"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/register_skum_logo">
+                app:layout_constraintTop_toBottomOf="@id/register_toolbar">
 
                 <TextView
                     android:id="@+id/register_sku_text"

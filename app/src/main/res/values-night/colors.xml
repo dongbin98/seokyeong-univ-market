@@ -9,6 +9,7 @@
     <color name="white">#FF000000</color>
     <color name="orange">#FFFF7F00</color>
     <color name="orange_pressed">#FFFF5500</color>
-    <color name="gray">#FF555555</color>
+    <color name="gray">#FFA5A5A5</color>
+    <color name="light_gray">#FF555555</color>
     <color name="dark_gray">#FFEAEAEA</color>
 </resources>
