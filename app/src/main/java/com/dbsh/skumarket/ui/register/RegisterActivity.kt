@@ -9,6 +9,7 @@ import com.dbsh.skumarket.api.provideSkuAuthApi
 import com.dbsh.skumarket.base.BaseActivity
 import com.dbsh.skumarket.databinding.ActivityRegisterBinding
 import com.dbsh.skumarket.rx.AutoClearedDisposable
+import com.dbsh.skumarket.util.Resource
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 
@@ -44,7 +45,7 @@ class RegisterActivity : BaseActivity<ActivityRegisterBinding>(R.layout.activity
         binding.registerButton.setOnClickListener {
             if (isAuth) {
                 showProgress()
-                viewModel.signUp(
+                viewModel.createUser(
                     binding.registerId.text.toString(),
                     binding.registerPw.text.toString(),
                     name,
@@ -73,8 +74,9 @@ class RegisterActivity : BaseActivity<ActivityRegisterBinding>(R.layout.activity
         // 학생인증 통신 체크
         disposable.add(viewModel.rtnStatus
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { if (!it.equals("S"))
-                Toast.makeText(this, "인증 실패, 에러 코드 : $it", Toast.LENGTH_SHORT).show()
+            .subscribe {
+                if (!it.equals("S"))
+                    Toast.makeText(this, "인증 실패, 에러 코드 : $it", Toast.LENGTH_SHORT).show()
                 Log.d("SKUM", "Network State : $it")
             })
 
@@ -94,12 +96,19 @@ class RegisterActivity : BaseActivity<ActivityRegisterBinding>(R.layout.activity
             })
 
         // 회원가입 처리
-        viewModel.registerState.observe(this) {
-            if (it != null) {
-                hideProgress()
-                Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
-                if (it.equals("회원가입에 성공하였습니다.")) {
+        viewModel.userRegistrationStatus.observe(this) {
+            when (it) {
+                is Resource.Loading -> {
+                    showProgress()
+                }
+                is Resource.Success -> {
+                    hideProgress()
+                    Toast.makeText(this, "가입 성공", Toast.LENGTH_SHORT).show()
                     finish()
+                }
+                is Resource.Error -> {
+                    hideProgress()
+                    Toast.makeText(this, it.message, Toast.LENGTH_SHORT).show()
                 }
             }
         }
