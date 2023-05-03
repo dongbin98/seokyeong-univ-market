@@ -4,7 +4,7 @@ import android.content.ContentValues
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.dbsh.skumarket.api.model.ChatListDto
+import com.dbsh.skumarket.api.model.ChatList
 import com.dbsh.skumarket.api.model.ChatUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
@@ -16,8 +16,8 @@ import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 class ChatListViewModel : ViewModel() {
-    var protoChatList: MutableLiveData<ArrayList<ChatListDto>> = MutableLiveData()
-    var chatList: MutableLiveData<ArrayList<ChatListDto>> = MutableLiveData()
+    var protoChatList: MutableLiveData<ArrayList<ChatList>> = MutableLiveData()
+    var chatList: MutableLiveData<ArrayList<ChatList>> = MutableLiveData()
     var deleteSignal: MutableLiveData<String> = MutableLiveData()
     private val auth by lazy { Firebase.auth }
     private val chatRef = Firebase.database.reference.child("ChatRoom")
@@ -27,7 +27,7 @@ class ChatListViewModel : ViewModel() {
     fun loadChatRoom() {
         Log.d(ContentValues.TAG, "########### loadChatRoom() ###########")
 
-        val dataList = ArrayList<ChatListDto>()
+        val dataList = ArrayList<ChatList>()
         var noData = true
         chatRef.child("chatRooms").orderByChild("users/$uid/join").equalTo(true).addValueEventListener(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
@@ -36,7 +36,7 @@ class ChatListViewModel : ViewModel() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 Log.d(ContentValues.TAG, "chatRef.child(\"chatRooms\").orderByChild(\"users/$uid/join\").equalTo(true).addValueEventListener")
                 dataList.clear()
-                var lastChat: ChatListDto?
+                var lastChat: ChatList?
                 noData = false
 
                 // 내가 포함된 채팅방에서 채팅방 하나하나 개별 조회
@@ -57,7 +57,7 @@ class ChatListViewModel : ViewModel() {
                         lastMessage = chat.child("message").value.toString().ifBlank { "사진을 업로드했습니다" }
                         lastChatTime = chat.child("time").value.toString()
                     }
-                    lastChat = ChatListDto(chatRoomKey, lastMessage, lastChatTime, "", chatRoomOtherId, "")
+                    lastChat = ChatList(chatRoomKey, lastMessage, lastChatTime, "", chatRoomOtherId, "")
                     dataList.add(lastChat)
                     println("dataList add")
                 }
@@ -69,7 +69,7 @@ class ChatListViewModel : ViewModel() {
         }
     }
 
-    fun loadUserProfile(dataList: ArrayList<ChatListDto>) {
+    fun loadUserProfile(dataList: ArrayList<ChatList>) {
         for ((position, data) in dataList.withIndex()) {
             val opponentId = data.opponentId
             userRef.child("users").child(opponentId).addValueEventListener(object : ValueEventListener {

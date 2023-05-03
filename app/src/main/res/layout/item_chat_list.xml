@@ -4,7 +4,7 @@
     <import type="java.util.HashMap"/>
     <variable
         name="LastChat"
-        type="com.dbsh.skumarket.api.model.ChatListDto" />
+        type="com.dbsh.skumarket.api.model.ChatList" />
 </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"

@@ -7,10 +7,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.dbsh.skumarket.R
 import com.dbsh.skumarket.databinding.ItemChatListBinding
-import com.dbsh.skumarket.api.model.ChatListDto
+import com.dbsh.skumarket.api.model.ChatList
 
-class ChatListAdapter(data: ArrayList<ChatListDto>) : RecyclerView.Adapter<ChatListAdapter.ListViewHolder>() {
-    var mData: ArrayList<ChatListDto> = data
+class ChatListAdapter(data: ArrayList<ChatList>) : RecyclerView.Adapter<ChatListAdapter.ListViewHolder>() {
+    var mData = data
     private var mClickable: Boolean? = null
     private var itemClickListener: OnItemClickListener? = null
     private var itemLongClickListener: OnItemLongClickListener? = null
@@ -25,11 +25,11 @@ class ChatListAdapter(data: ArrayList<ChatListDto>) : RecyclerView.Adapter<ChatL
     }
 
     interface OnItemClickListener {
-        fun onItemClick(v: View, data: ChatListDto, position: Int)
+        fun onItemClick(v: View, data: ChatList, position: Int)
     }
 
     interface OnItemLongClickListener {
-        fun onItemLongClick(v: View, data: ChatListDto, position: Int)
+        fun onItemLongClick(v: View, data: ChatList, position: Int)
     }
 
     fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {
@@ -54,7 +54,7 @@ class ChatListAdapter(data: ArrayList<ChatListDto>) : RecyclerView.Adapter<ChatL
     }
 
     inner class ListViewHolder(private val binding: ItemChatListBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: ChatListDto) {
+        fun bind(item: ChatList) {
             binding.lastChat = item
 
             if (item.opponentImage.isNullOrBlank()) {

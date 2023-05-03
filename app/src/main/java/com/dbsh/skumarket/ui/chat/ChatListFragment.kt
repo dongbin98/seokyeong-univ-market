@@ -9,16 +9,13 @@ import com.dbsh.skumarket.adapters.ChatListAdapter
 import com.dbsh.skumarket.base.BaseFragment
 import com.dbsh.skumarket.util.LinearLayoutManagerWrapper
 import com.dbsh.skumarket.databinding.FragmentChatListBinding
-import com.dbsh.skumarket.api.model.ChatListDto
+import com.dbsh.skumarket.api.model.ChatList
 
 class ChatListFragment : BaseFragment<FragmentChatListBinding>(R.layout.fragment_chat_list) {
-    companion object {
-        const val TAG = "ChatList Fragment"
-    }
 
     private lateinit var viewModel: ChatListViewModel
     private lateinit var adapter: ChatListAdapter
-    private var chatRoomList = mutableListOf<ChatListDto>()
+    private var chatRoomList = mutableListOf<ChatList>()
 
     @SuppressLint("NotifyDataSetChanged")
     override fun init() {
@@ -27,10 +24,10 @@ class ChatListFragment : BaseFragment<FragmentChatListBinding>(R.layout.fragment
             viewModel = viewModel
         }
         // RecyclerView Setting
-        adapter = ChatListAdapter(chatRoomList as ArrayList<ChatListDto>)
+        adapter = ChatListAdapter(chatRoomList as ArrayList<ChatList>)
         adapter.apply {
             setOnItemClickListener(object : ChatListAdapter.OnItemClickListener {
-                override fun onItemClick(v: View, data: ChatListDto, position: Int) {
+                override fun onItemClick(v: View, data: ChatList, position: Int) {
                     println("채팅방 : ${data.roomId} 입장")
                     Intent(context, ChatActivity::class.java).apply {
                         putExtra("roomId", data.roomId)
@@ -40,10 +37,9 @@ class ChatListFragment : BaseFragment<FragmentChatListBinding>(R.layout.fragment
                 }
             })
             setOnItemLongClickListener(object : ChatListAdapter.OnItemLongClickListener {
-                override fun onItemLongClick(v: View, data: ChatListDto, position: Int) {
+                override fun onItemLongClick(v: View, data: ChatList, position: Int) {
                     Toast.makeText(context, "LongClick Event", Toast.LENGTH_SHORT).show()
                     showDialog(data.roomId, data.opponentName)
-//                    viewModel.deleteChatRoom(data.roomId)
                 }
             })
         }
@@ -57,7 +53,7 @@ class ChatListFragment : BaseFragment<FragmentChatListBinding>(R.layout.fragment
         viewModel.loadChatRoom()
 
         viewModel.protoChatList.observe(viewLifecycleOwner) {
-            if(it.isNotEmpty()) {
+            if (it.isNotEmpty()) {
                 viewModel.loadUserProfile(it)
             } else {
                 chatRoomList.clear()

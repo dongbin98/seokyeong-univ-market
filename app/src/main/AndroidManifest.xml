@@ -31,10 +31,8 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-        <activity android:name=".ui.post.AddSellingActivity" />
         <activity android:name=".ui.register.RegisterActivity" />
         <activity android:name=".ui.main.MainActivity" />
-        <activity android:name=".ui.post.LoadSellingInfoActivity" />
         <activity android:name=".ui.chat.ChatActivity" />
         <activity android:name=".ui.post.UploadPostActivity"/>
     </application>
