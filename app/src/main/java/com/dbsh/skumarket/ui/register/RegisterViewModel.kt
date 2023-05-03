@@ -57,8 +57,8 @@ class RegisterViewModel(private val api: SkuAuthApi) : ViewModel() {
     fun createUser(email: String, pw: String, name: String, stuId: String) {
         _userRegistrationStatus.postValue(Resource.Loading())
         viewModelScope.launch(Dispatchers.Main) {
-            val loginResult = repository.createUser(email, pw, name, stuId)
-            _userRegistrationStatus.postValue(loginResult)
+            val createResult = repository.createUser(email, pw, name, stuId)
+            _userRegistrationStatus.postValue(createResult)
         }
     }
 }

@@ -40,11 +40,6 @@ class ImageAdapter(
     }
 }
 
-sealed class ImageItems {
-    data class Image(
-        val uri: Uri,
-    ) : ImageItems()
-}
 
 
 //class LoadMoreViewHolder(binding: ItemPostImageBinding): RecyclerView.ViewHolder(binding.root) {

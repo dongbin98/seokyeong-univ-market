@@ -1,12 +1,14 @@
 package com.dbsh.skumarket.ui.login
 
 import android.content.Intent
+import android.view.View
 import android.widget.Toast
 import com.dbsh.skumarket.R
 import com.dbsh.skumarket.base.BaseActivity
 import com.dbsh.skumarket.databinding.ActivityLoginBinding
 import com.dbsh.skumarket.ui.main.MainActivity
 import com.dbsh.skumarket.ui.register.RegisterActivity
+import com.dbsh.skumarket.util.Resource
 
 class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login) {
 
@@ -38,21 +40,28 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(R.layout.activity_login
 
         // 로그인 처리
         viewModel.loginState.observe(this) {
-            if (it != null) {
-                println(it.toString())
-                if (it.equals("S")) {
+            when (it) {
+                is Resource.Loading -> {
+                    showProgress()
+                }
+                is Resource.Success -> {
+                    hideProgress()
                     Toast.makeText(this, "로그인 성공", Toast.LENGTH_SHORT).show()
                     Intent(this@LoginActivity, MainActivity::class.java).run { startActivity(this) }
-                } else {
-                    Toast.makeText(this, "로그인 실패", Toast.LENGTH_SHORT).show()
+                }
+                is Resource.Error -> {
+                    hideProgress()
+                    Toast.makeText(this, it.message, Toast.LENGTH_SHORT).show()
                 }
             }
         }
+    }
 
-        viewModel.loginUser.observe(this) {
-            if (it != null) {
-                println(it.email)
-            }
-        }
+    private fun showProgress() {
+        binding.loginProgressBar.visibility = View.VISIBLE
+    }
+
+    private fun hideProgress() {
+        binding.loginProgressBar.visibility = View.GONE
     }
 }
