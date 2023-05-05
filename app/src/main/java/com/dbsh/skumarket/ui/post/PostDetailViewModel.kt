@@ -23,10 +23,11 @@ class PostDetailViewModel : ViewModel() {
     fun loadPost(postId: String, uid: String) {
         _loadPostLiveData.postValue(Resource.Loading())
         _loadProfileLiveData.postValue(Resource.Loading())
+
         viewModelScope.launch(Dispatchers.Main) {
             val loadPostResult = repository.loadPost(postId)
-            val loadProfileResult = repository.loadProfile(uid)
             _loadPostLiveData.postValue(loadPostResult)
+            val loadProfileResult = repository.loadProfile(uid)
             _loadProfileLiveData.postValue(loadProfileResult)
         }
     }

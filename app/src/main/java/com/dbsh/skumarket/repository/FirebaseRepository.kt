@@ -117,9 +117,11 @@ class FirebaseRepository {
         return withContext(Dispatchers.IO) {
             safeCall {
                 val database = databaseReference.child("User").child("users").child(uid)
-                var user = User()
+                val user = User()
                 database.get().addOnCompleteListener { snapshot ->
-                    user = snapshot.result.getValue<User>()!!
+                    user.uid = snapshot.result.child("uid").value.toString()
+                    user.name = snapshot.result.child("name").value.toString()
+                    user.profileImage = snapshot.result.child("profileImage").value.toString()
                     println(user.toString())
                 }.await()
                 Resource.Success(user)

@@ -28,14 +28,13 @@ class ChatActivity : BaseActivity<ActivityChatBinding>(R.layout.activity_chat) {
         viewModel = ChatViewModel()
 
         // 방 정보 전달받음
-        val roomId = intent.getStringExtra("roomId").toString()
+        var roomId = intent.getStringExtra("roomId")
         val opponentImage = intent.getStringExtra("opponentImage").toString()
         val opponent = intent.getStringExtra("opponent").toString()
+        val opponentId = intent.getStringExtra("opponentId").toString()
 
         chatList = ArrayList()
         adapter = ChatAdapter(chatList as ArrayList<Chat>, uid.toString(), opponentImage)
-        adapter.apply {
-        }
 
         // 툴바
         binding.chatOpponentName.text = opponent
@@ -52,15 +51,19 @@ class ChatActivity : BaseActivity<ActivityChatBinding>(R.layout.activity_chat) {
         }
 
         // 채팅방 로드
-        if(roomId.isNotBlank())
+        if(roomId != null)
             viewModel.loadChat(roomId)
+        else
+            viewModel.checkChatRoom(opponentId)
 
         // Image Add Callback 등록
         val getResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if (it.resultCode == RESULT_OK) {
                 if (it.data?.data != null) {
                     selectedImage = it.data?.data
-                    viewModel.sendImage(roomId, selectedImage!!)
+                    if (roomId != null) {
+                        viewModel.sendImage(roomId!!, selectedImage!!)
+                    }
                 }
             }
         }
@@ -68,7 +71,9 @@ class ChatActivity : BaseActivity<ActivityChatBinding>(R.layout.activity_chat) {
         // 채팅 보내기
         binding.chatSend.setOnClickListener {
             if (binding.chatInput.text.toString().isNotBlank()) {
-                viewModel.sendMessage(roomId, binding.chatInput.text.toString())
+                if (roomId != null) {
+                    viewModel.sendMessage(roomId!!, binding.chatInput.text.toString())
+                }
                 binding.chatInput.text.clear()
             }
         }
@@ -80,6 +85,12 @@ class ChatActivity : BaseActivity<ActivityChatBinding>(R.layout.activity_chat) {
             intent.run {
                 getResult.launch(this)
             }
+        }
+
+        // 채팅방 ID 갱신
+        viewModel.roomId.observe(this) {
+            roomId = it
+            viewModel.loadChat(roomId.toString())
         }
 
         // 채팅 갱신

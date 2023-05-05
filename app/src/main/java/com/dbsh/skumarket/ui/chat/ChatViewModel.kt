@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
 import android.net.Uri
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.dbsh.skumarket.api.model.Chat
@@ -29,8 +30,9 @@ class ChatViewModel : ViewModel() {
     private val chatRef = Firebase.database.reference.child("ChatRoom")
     private val storageRef = Firebase.storage.reference.child("ChatRoom")
     private val uid = auth.currentUser?.uid
-    private lateinit var _opponent: String
-    private lateinit var _message: String
+
+    private var _roomId = MutableLiveData<String?>()
+    val roomId: LiveData<String?> = _roomId
 
     // 메시지 보내기
     @SuppressLint("SimpleDateFormat")
@@ -112,12 +114,10 @@ class ChatViewModel : ViewModel() {
     }
 
     // 채팅방 유무 체크
-    fun checkChatRoom(opponent: String, message: String) {
-        Log.d(TAG, "########### checkChatRoom($opponent, $message) ###########")
+    fun checkChatRoom(opponent: String) {
+        Log.d(TAG, "########### checkChatRoom($opponent) ###########")
 
         var chatRoomUid: String? = null
-        _opponent = opponent
-        _message = message
         chatRef.child("chatRooms").orderByChild("users/$uid").equalTo(true)
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
@@ -128,10 +128,10 @@ class ChatViewModel : ViewModel() {
                     }
                     if (chatRoomUid != null) {
                         // 채팅방 존재 시 메시지 보냄
-                        sendMessage(chatRoomUid.toString(), _message)
+                        loadChat(chatRoomUid!!)
                     } else {
                         // 채팅방 미존재 시 채팅방 생성
-                        createChatRoom()
+                        createChatRoom(opponent)
                     }
                 }
                 override fun onCancelled(error: DatabaseError) {
@@ -141,7 +141,7 @@ class ChatViewModel : ViewModel() {
 
     // 채팅방 생성
     @SuppressLint("SimpleDateFormat")
-    fun createChatRoom() {
+    fun createChatRoom(opponent: String) {
         Log.d(TAG, "########### createChatRoom() ###########")
 
         val time = System.currentTimeMillis()
@@ -150,13 +150,11 @@ class ChatViewModel : ViewModel() {
 
         val chatRoom = ChatRoom()
         chatRoom.users[uid.toString()] = ChatUser(true, curTime)
-        chatRoom.users[_opponent] = ChatUser(true, curTime)
+        chatRoom.users[opponent] = ChatUser(true, curTime)
 
         val chatRoomUid: String? = chatRef.child("chatRooms").push().key
         chatRef.child("chatRooms").child(chatRoomUid.toString()).setValue(chatRoom)
-
-        // 채팅방 생성 후 메시지 보냄
-        sendMessage(chatRoomUid.toString(), _message)
+        _roomId.postValue(chatRoomUid)
     }
 
     // 채팅 불러오기
@@ -176,7 +174,7 @@ class ChatViewModel : ViewModel() {
                 for (chat in snapshot.child("messages").children) {
                     print("메시지 시각 : ${chat.child("time").value}\n입장한 시각 : ${myTime}의 비교\n")
                     if(chat.child("time").value.toString() != "out") {
-                        if (Date(dateFormat.parse(chat.child("time").value.toString())!!.time).compareTo(Date(dateFormat.parse(myTime)!!.time)) >= 0) {
+                        if (Date(dateFormat.parse(chat.child("time").value.toString())!!.time) >= Date(dateFormat.parse(myTime)!!.time)) {
                             println("메시지 시각이 더 늦으니 보여줄게요")
                             dataList.add(chat.getValue<Chat>()!!)
                             //                            chat.getValue<Chat>()?.let {

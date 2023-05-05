@@ -29,7 +29,8 @@ class PostDetailActivity : BaseActivity<ActivityPostDetailBinding>(R.layout.acti
 
         binding.postChat.setOnClickListener {
             Intent(this, ChatActivity::class.java).run {
-                putExtra("opponent", uid)
+                putExtra("opponent", binding.postNickname.text.toString())
+                putExtra("opponentId", uid)
                 startActivity(this)
             }
         }
@@ -49,6 +50,7 @@ class PostDetailActivity : BaseActivity<ActivityPostDetailBinding>(R.layout.acti
         viewModel.loadProfileLiveData.observe(this) {
             when (it) {
                 is Resource.Loading -> {
+                    binding.postChat.isClickable = false
                     Log.d("loadPostLiveData", "프로필 로드중")
                 }
                 is Resource.Success -> {
@@ -61,6 +63,7 @@ class PostDetailActivity : BaseActivity<ActivityPostDetailBinding>(R.layout.acti
                         Glide.with(this).load(R.drawable.default_profile_img).circleCrop()
                             .into(binding.postProfileImage)
                     }
+                    binding.postChat.isClickable = true
                 }
                 is Resource.Error -> {
                     Log.e("loadPostLiveData", it.message.toString())
