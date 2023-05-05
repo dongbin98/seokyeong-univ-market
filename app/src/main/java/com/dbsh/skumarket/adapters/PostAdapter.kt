@@ -45,9 +45,9 @@ class PostAdapter(data: ArrayList<PostList>) : RecyclerView.Adapter<PostAdapter.
             binding.posts = item
 
             if (item.image.isNullOrBlank()) {
-                Glide.with(binding.root).load(R.drawable.default_profile_img).circleCrop().into(binding.postListImage)
+                Glide.with(binding.root).load(R.drawable.default_profile_img).into(binding.postListImage)
             } else {
-                Glide.with(binding.root).load(item.image).circleCrop().into(binding.postListImage)
+                Glide.with(binding.root).load(item.image).into(binding.postListImage)
             }
 
             val position = adapterPosition

@@ -1,143 +1,146 @@
-<?xml version="1.0" encoding="utf-8"?>
-
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="java.util.HashMap" />
+
+        <variable
+            name="post"
+            type="com.dbsh.skumarket.api.model.Post" />
+        <variable
+            name="user"
+            type="com.dbsh.skumarket.api.model.User" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
-    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            tools:context=".ui.post.LoadSellingInfoActivity"
-            app:layout_constraintTop_toTopOf="parent"
-
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent">
+                app:layout_constraintTop_toTopOf="parent">
 
-                <ImageView
-                    android:id="@+id/SellingImg"
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/post_viewPager"
                     android:layout_width="match_parent"
                     android:layout_height="400dp"
-
-                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent" />
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/post_tabLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="12dp"
+                    android:layout_marginBottom="24dp"
+                    app:layout_constraintBottom_toBottomOf="@id/post_viewPager"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:tabBackground="@drawable/selector_tab"
+                    app:tabIndicator="@null" />
+
 
                 <ImageView
-                    android:id="@+id/profile_img"
+                    android:id="@+id/post_profile_image"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:src="@drawable/default_profile_img"
-                    android:layout_marginTop="16dp"
                     android:layout_marginStart="16dp"
-                    app:layout_constraintTop_toBottomOf="@id/SellingImg"
-                    app:layout_constraintLeft_toLeftOf="parent" />
-
-
-                <TextView
-                    android:id="@+id/nickname"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:layout_marginStart="80dp"
-                    android:layout_marginEnd="16dp"
-                    android:textSize="18dp"
-                    android:textColor="@color/black"
-                    android:textStyle="bold"
-                    android:text="sadsfasdf"
-
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/SellingImg"/>
+                    android:src="@drawable/default_profile_img"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/post_viewPager" />
 
                 <TextView
-                    android:id="@+id/schoolnumber"
-                    android:layout_width="match_parent"
+                    android:id="@+id/post_nickname"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="80dp"
+                    android:layout_marginTop="16dp"
                     android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="10dp"
-                    android:textSize="16dp"
-                    android:text="sadsfasdf"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    android:text="@{user.name}"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/nickname"/>
+                    app:layout_constraintTop_toTopOf="@id/post_profile_image" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
                     android:background="#d3d3d3"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/schoolnumber"/>
+                    app:layout_constraintTop_toBottomOf="@id/post_nickname" />
 
                 <TextView
-                    android:id="@+id/titletext"
+                    android:id="@+id/post_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
                     android:layout_marginTop="32dp"
-                    android:layout_marginStart="16dp"
                     android:layout_marginEnd="16dp"
+                    android:text="@{post.title}"
+                    android:textColor="@color/black"
+                    android:textSize="22sp"
                     android:textStyle="bold"
-                    android:textColor="@color/black"
-                    android:textSize="22dp"
-                    android:text="asdfasdfa"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/schoolnumber"/>
+                    app:layout_constraintTop_toBottomOf="@id/post_nickname" />
 
                 <TextView
-                    android:id="@+id/datetext"
+                    android:id="@+id/post_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
                     android:layout_marginTop="8dp"
-                    android:layout_marginStart="16dp"
                     android:layout_marginEnd="16dp"
-                    android:textSize="16dp"
-                    android:text="asdfasdfa"
+                    android:text="@{post.time}"
+                    android:textSize="16sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/titletext"/>
+                    app:layout_constraintTop_toBottomOf="@id/post_title" />
 
                 <TextView
-                    android:id="@+id/infotext"
+                    android:id="@+id/post_content"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
                     android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
                     android:layout_marginEnd="16dp"
+                    android:text="@{post.content}"
                     android:textColor="@color/black"
-                    android:textSize="18dp"
-                    android:text="asdfasdfa"
+                    android:textSize="18sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/datetext"/>
+                    app:layout_constraintTop_toBottomOf="@id/post_date" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
 
 
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="70dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintRight_toRightOf="parent">
 
             <View
                 android:layout_width="match_parent"
@@ -145,10 +148,10 @@
                 android:background="#d3d3d3"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <com.airbnb.lottie.LottieAnimationView
-                android:id="@+id/likeBtn"
+                android:id="@+id/post_like"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:onClick="onClickButton"
@@ -161,36 +164,36 @@
             <View
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:background="#d3d3d3"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
+                android:background="#d3d3d3"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toRightOf="@id/likeBtn"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintLeft_toRightOf="@id/post_like"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/pricetext"
+                android:id="@+id/post_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="10000원"
+                android:layout_marginStart="20dp"
+                android:text="@{post.price+'원'}"
                 android:textColor="@color/black"
                 android:textSize="18dp"
                 android:textStyle="bold"
-                android:layout_marginStart="20dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toRightOf="@id/likeBtn"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintLeft_toRightOf="@id/post_like"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <Button
-                android:id="@+id/chatButton"
+                android:id="@+id/post_chat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"
                 android:background="#0055ff"
                 android:text="채팅하기"
+                android:textColor="@color/white"
                 android:textSize="15dp"
                 android:textStyle="bold"
-                android:layout_marginRight="20dp"
-                android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

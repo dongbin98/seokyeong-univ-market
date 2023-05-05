@@ -26,9 +26,6 @@ class ChatActivity : BaseActivity<ActivityChatBinding>(R.layout.activity_chat) {
 
     override fun init() {
         viewModel = ChatViewModel()
-        binding.apply {
-            viewModel = viewModel
-        }
 
         // 방 정보 전달받음
         val roomId = intent.getStringExtra("roomId").toString()
@@ -55,7 +52,8 @@ class ChatActivity : BaseActivity<ActivityChatBinding>(R.layout.activity_chat) {
         }
 
         // 채팅방 로드
-        viewModel.loadChat(roomId)
+        if(roomId.isNotBlank())
+            viewModel.loadChat(roomId)
 
         // Image Add Callback 등록
         val getResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
