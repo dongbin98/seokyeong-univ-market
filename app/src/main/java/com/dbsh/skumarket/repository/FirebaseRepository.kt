@@ -1,6 +1,5 @@
 package com.dbsh.skumarket.repository
 
-import android.annotation.SuppressLint
 import android.net.Uri
 import com.dbsh.skumarket.api.model.Post
 import com.dbsh.skumarket.api.model.PostList
@@ -9,23 +8,15 @@ import com.dbsh.skumarket.util.Resource
 import com.dbsh.skumarket.util.currentDate
 import com.dbsh.skumarket.util.dateToString
 import com.dbsh.skumarket.util.safeCall
-import com.google.android.gms.tasks.OnCanceledListener
-import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
-import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
-import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -35,12 +26,14 @@ class FirebaseRepository {
     private val databaseReference = Firebase.database.reference
     private var uriList = mutableMapOf<String, String>()
 
+    // 이미 가입한 회원인지 체크
     suspend fun checkRegister(stuId: String): Resource<Boolean> {
         return withContext(Dispatchers.IO) {
             safeCall {
                 var isChecked = true
                 val snapshot = databaseReference.child("User").child("users").get().await()
                 snapshot.children.forEach {
+                    // 회원 목록중에서 현재 사용자의 학번으로 이미 등록되어 있는지 확인
                     if(it.child("uid").value.toString() == stuId) {
                         println("check : ${it.child("uid").value.toString()}")
                         isChecked = false
@@ -54,6 +47,7 @@ class FirebaseRepository {
         }
     }
 
+    // 회원가입
     suspend fun createUser(email: String, pw: String, name: String, stuId: String): Resource<AuthResult> {
         return withContext(Dispatchers.IO) {
             safeCall {
@@ -66,6 +60,7 @@ class FirebaseRepository {
         }
     }
 
+    // 로그인
     suspend fun login(email: String, pw: String): Resource<AuthResult> {
         return withContext(Dispatchers.IO) {
             safeCall {
@@ -75,6 +70,7 @@ class FirebaseRepository {
         }
     }
 
+    // 이미지 업로드 (게시글 업로드 과정)
     suspend fun uploadPhoto(postId: String, imageUri: List<Uri>) {
         return withContext(Dispatchers.IO) {
             val storage = storageReference.child("Post")
@@ -95,6 +91,7 @@ class FirebaseRepository {
         }
     }
 
+    // 게시글 업로드
     suspend fun uploadPost(postId: String, title: String, price: String, content: String): Resource<Task<Void>> {
         return withContext(Dispatchers.IO) {
             safeCall {
@@ -108,12 +105,13 @@ class FirebaseRepository {
         }
     }
 
+    // 게시글 삭제
     suspend fun deletePost(postId: String): Resource<Task<Void>> {
         return withContext(Dispatchers.IO) {
             safeCall {
                 val database = databaseReference.child("Post").child("posts").child(postId)
 
-                // Firebase Storage 폴더 삭제 미지원 -> 재귀삭제
+                // Firebase Storage 폴더 삭제 미지원 -> Post DB에 저장된 url 경로로 storage에 접근하여 파일 삭제
                 database.child("images").get().addOnCompleteListener {
                     it.result.children.forEach { snapshot ->
                         storageReference.storage.getReferenceFromUrl(snapshot.value.toString()).delete()
@@ -128,6 +126,7 @@ class FirebaseRepository {
         }
     }
 
+    // 게시글 작성자 프로필 로드
     suspend fun loadProfile(uid: String): Resource<User> {
         return withContext(Dispatchers.IO) {
             safeCall {
@@ -144,6 +143,7 @@ class FirebaseRepository {
         }
     }
 
+    // 게시글 정보 로드
     suspend fun loadPost(postId: String): Resource<Post> {
         return withContext(Dispatchers.IO) {
             safeCall {
@@ -167,13 +167,15 @@ class FirebaseRepository {
         }
     }
 
+    // 게시글 목록 로드
     suspend fun loadPosts(): Resource<ArrayList<PostList>> {
         return withContext(Dispatchers.IO) {
             safeCall {
                 val list = mutableListOf<PostList>()
                 val database = databaseReference.child("Post").child("posts")
-
                 val snapshot = database.get().await()
+
+                // 목록에 보여질 대표이미지, 제목, 업로드시각, 가격, 작성자 id을 PostList(=postListDTO)에 담아 mutableList로 저장
                 snapshot.children.forEach {
                     val post = PostList(
                         it.key.toString(),

@@ -19,8 +19,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
             viewModel = viewModel
             executePendingBindings()
         }
+        // AAC Navigation
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host) as NavHostFragment
         val navController = navHostFragment.navController
-        findViewById<BottomNavigationView>(R.id.navigationView).setupWithNavController(navController)
+        binding.navigationView.setupWithNavController(navController)
     }
 }
