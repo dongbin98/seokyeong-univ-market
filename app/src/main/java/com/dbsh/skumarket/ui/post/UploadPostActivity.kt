@@ -77,6 +77,7 @@ class UploadPostActivity : BaseActivity<ActivityUploadPostBinding>(R.layout.acti
                 }
                 is Resource.Success -> {
                     Toast.makeText(this, "업로드 성공", Toast.LENGTH_SHORT).show()
+                    setResult(100, intent)
                     finish()
                 }
                 is Resource.Error -> {

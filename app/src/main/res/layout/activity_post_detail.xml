@@ -9,6 +9,7 @@
         <variable
             name="post"
             type="com.dbsh.skumarket.api.model.Post" />
+
         <variable
             name="user"
             type="com.dbsh.skumarket.api.model.User" />
@@ -36,7 +37,7 @@
                 <androidx.viewpager2.widget.ViewPager2
                     android:id="@+id/post_viewPager"
                     android:layout_width="match_parent"
-                    android:layout_height="400dp"
+                    android:layout_height="300dp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -45,9 +46,9 @@
                     android:id="@+id/post_tabLayout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingHorizontal="12dp"
                     android:layout_marginBottom="24dp"
-                    app:layout_constraintBottom_toBottomOf="@id/post_viewPager"
+                    android:paddingHorizontal="12dp"
+                    app:layout_constraintTop_toBottomOf="@id/post_viewPager"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:tabBackground="@drawable/selector_tab"
@@ -62,7 +63,7 @@
                     android:layout_marginTop="16dp"
                     android:src="@drawable/default_profile_img"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/post_viewPager" />
+                    app:layout_constraintTop_toBottomOf="@id/post_tabLayout" />
 
                 <TextView
                     android:id="@+id/post_nickname"
@@ -77,6 +78,28 @@
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@id/post_profile_image" />
+
+                <TextView
+                    android:id="@+id/post_update"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="수정"
+                    android:textColor="@color/dark_gray"
+                    app:layout_constraintBottom_toBottomOf="@id/post_nickname"
+                    app:layout_constraintStart_toEndOf="@id/post_nickname"
+                    app:layout_constraintTop_toTopOf="@id/post_nickname" />
+
+                <TextView
+                    android:id="@+id/post_delete"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:text="삭제"
+                    android:textColor="@color/dark_gray"
+                    app:layout_constraintBottom_toBottomOf="@id/post_update"
+                    app:layout_constraintStart_toEndOf="@id/post_update"
+                    app:layout_constraintTop_toTopOf="@id/post_update" />
 
                 <View
                     android:layout_width="match_parent"

@@ -14,6 +14,9 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
@@ -78,6 +81,7 @@ class FirebaseRepository {
             uriList.clear()
             var itemCount = 0
 
+            // 이미지 업로드
             for((index, uri) in imageUri.withIndex()) {
                 if(index >= 10) // 10회 제한
                     break
@@ -86,15 +90,6 @@ class FirebaseRepository {
                 task.storage.downloadUrl.addOnCompleteListener {
                     println("url:${it.result}")
                     uriList[index.toString()] = it.result.toString()
-                }.await()
-            }
-
-            imageUri.forEach {
-                val fileName = "${System.currentTimeMillis()}.png"
-                val task = storage.child(postId).child(fileName).putFile(it).await()
-                task.storage.downloadUrl.addOnCompleteListener { task ->
-                    println("url:${task.result}")
-                    uriList[itemCount++.toString()] = task.result.toString()
                 }.await()
             }
         }
@@ -107,6 +102,26 @@ class FirebaseRepository {
                 val curTime = currentDate().dateToString("M월 d일 HH:mm")
                 val post = Post(firebaseAuth.uid.toString(), title, curTime, price, content, uriList as HashMap)
                 Resource.Success(database.child("posts").child(postId).setValue(post).addOnCompleteListener {
+                    Resource.Success(it)
+                })
+            }
+        }
+    }
+
+    suspend fun deletePost(postId: String): Resource<Task<Void>> {
+        return withContext(Dispatchers.IO) {
+            safeCall {
+                val database = databaseReference.child("Post").child("posts").child(postId)
+
+                // Firebase Storage 폴더 삭제 미지원 -> 재귀삭제
+                database.child("images").get().addOnCompleteListener {
+                    it.result.children.forEach { snapshot ->
+                        storageReference.storage.getReferenceFromUrl(snapshot.value.toString()).delete()
+                    }
+                }.await()
+
+                // 게시글 삭제
+                Resource.Success(database.removeValue().addOnCompleteListener {
                     Resource.Success(it)
                 })
             }
@@ -157,6 +172,7 @@ class FirebaseRepository {
             safeCall {
                 val list = mutableListOf<PostList>()
                 val database = databaseReference.child("Post").child("posts")
+
                 val snapshot = database.get().await()
                 snapshot.children.forEach {
                     val post = PostList(

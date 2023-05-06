@@ -1,8 +1,10 @@
 package com.dbsh.skumarket.ui.post
 
 import android.content.Intent
+import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import com.dbsh.skumarket.R
 import com.dbsh.skumarket.adapters.PostAdapter
 import com.dbsh.skumarket.api.model.PostList
@@ -18,6 +20,22 @@ class PostListFragment : BaseFragment<FragmentPostListBinding>(R.layout.fragment
     private lateinit var adapter: PostAdapter
     private var postList = mutableListOf<PostList>()
 
+//    override fun onResume() {
+//        // 게시글 등록, 갱신, 삭제 후 리스트로 돌아올 때 자동 목록 갱신 -> 모든 Resume 이벤트시 발생함
+//        super.onResume()
+//        viewModel.loadPosts()
+//    }
+
+    // registerForActivityResult 통해 게시글 등록, 갱신, 삭제 이후 프래그먼트로 돌아올 때 List Update
+    private val postLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if(it.resultCode == 100) {
+                Log.d("postLauncher", "Post List is updated!!")
+                viewModel.loadPosts()
+            }
+        }
+
+
     override fun init() {
         viewModel = PostListViewModel()
         binding.apply {
@@ -31,7 +49,7 @@ class PostListFragment : BaseFragment<FragmentPostListBinding>(R.layout.fragment
                     Intent(context, PostDetailActivity::class.java).run {
                         putExtra("postId", data.postId)
                         putExtra("uid", data.uid)
-                        startActivity(this)
+                        postLauncher.launch(this)
                     }
                 }
             })
@@ -45,7 +63,7 @@ class PostListFragment : BaseFragment<FragmentPostListBinding>(R.layout.fragment
         }
 
         binding.postListAdd.setOnClickListener {
-            Intent(context, UploadPostActivity::class.java).run { startActivity(this) }
+            Intent(context, UploadPostActivity::class.java).run { postLauncher.launch(this) }
         }
 
         viewModel.loadPosts()
