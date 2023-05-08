@@ -149,5 +149,4 @@ SeoKyeong University Market Android Native Application
 - 회원가입 시 Retrofit Callback 처리 → Retrofit + RxJava (완료)   
 - 게시글 사진 여러개 등록 (완료)   
 - 게시글을 통해 대화 요청 (완료)   
-- 판매자 프로필 보기   
-- 게시글 CRUD 처리 (Update 제외 완료)   
+- 게시글 CRUD 처리 (Update 제외 완료)
