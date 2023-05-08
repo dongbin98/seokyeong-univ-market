@@ -131,17 +131,17 @@ SeoKyeong University Market Android Native Application
 ## 4. Result   
 - 로그인 및 프로필 편집
 <p align="left">
-  <img src="https://user-images.githubusercontent.com/77912766/236648669-074c148f-17fc-4ab2-bad9-f1caca945b36.gif"/>
+  <img src="https://user-images.githubusercontent.com/77912766/236757305-df787f5d-1c0a-46de-8342-59bdade79608.gif"/>
 </p>
 
 - 게시글 CRUD (갱신 제외)
 <p align="left">
-  <img src="https://user-images.githubusercontent.com/77912766/236648681-fac53048-2d1d-4436-9675-1a78c6c5c03e.gif"/>
+  <img src="https://user-images.githubusercontent.com/77912766/236757349-37ea3b4a-2b71-414f-a4c8-82ade862bb69.gif"/>
 </p>
 
 - 채팅
 <p align="left">
-  <img src="https://user-images.githubusercontent.com/77912766/236648703-9c901ca2-4dc3-4422-b3a2-e63998354b17.gif"/>
+  <img src="https://user-images.githubusercontent.com/77912766/236757392-3023ae6f-4e90-4019-908d-d25309b8f9e0.gif"/>
 </p>
 
 ## 5. 향후 계획   
