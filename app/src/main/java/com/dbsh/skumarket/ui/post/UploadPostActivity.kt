@@ -4,23 +4,32 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.ImageDecoder
+import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.os.Build
+import android.util.Log
 import android.view.MenuItem
-import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.Observer
+import androidx.core.net.toUri
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.target.SimpleTarget
+import com.bumptech.glide.request.transition.Transition
 import com.dbsh.skumarket.R
 import com.dbsh.skumarket.adapters.ImageAdapter
 import com.dbsh.skumarket.base.BaseActivity
 import com.dbsh.skumarket.databinding.ActivityUploadPostBinding
-import com.dbsh.skumarket.ui.main.MainActivity
 import com.dbsh.skumarket.util.Resource
+import kotlinx.coroutines.*
 
 class UploadPostActivity : BaseActivity<ActivityUploadPostBinding>(R.layout.activity_upload_post) {
 
@@ -28,28 +37,47 @@ class UploadPostActivity : BaseActivity<ActivityUploadPostBinding>(R.layout.acti
         const val REQUEST_EXTERNAL_STORAGE = 100
     }
 
+    // 업데이트 시 필요한 기존 정보
+    private lateinit var postId: String
+    private lateinit var uid: String
+    private lateinit var time: String
+    private var isUpdate = false
+
+
     private lateinit var imageAdapter: ImageAdapter
-    private lateinit var imageList: MutableList<Uri>
+    private lateinit var uriList: MutableList<Uri>
+    private val bitmapList: MutableList<Bitmap> by lazy { mutableListOf() }
     lateinit var viewModel: UploadPostViewModel
 
-    @SuppressLint("SetTextI18n")
     private val imageLoadLauncher =
         registerForActivityResult(ActivityResultContracts.GetMultipleContents()) { uriList ->
             updateImages(uriList.reversed())
-            binding.uploadPostImageCount.text = "${imageAdapter.itemCount}/10"
         }
 
+    @RequiresApi(Build.VERSION_CODES.P)
     override fun init() {
         viewModel = UploadPostViewModel()
         binding.apply {
             viewModel = viewModel
         }
+        initRecyclerView()
+
+        if (!intent.getStringExtra("uid").isNullOrEmpty() && !intent.getStringExtra("postId")
+                .isNullOrEmpty()
+        ) {
+            uid = intent.getStringExtra("uid").toString()
+            postId = intent.getStringExtra("postId").toString()
+            Log.d("uid", uid)
+            Log.d("postId", postId)
+            // 수정을 통해 해당 액티비티에 온 경우
+            viewModel.loadPost(postId)
+            binding.uploadPostButton.text = "수정하기"
+            isUpdate = true
+        }
 
         setSupportActionBar(binding.uploadPostToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = ""
-
-        initRecyclerView()
 
         binding.uploadPostPhoto.setOnClickListener {
             checkPermission() // Api Level 33 처리 예정
@@ -57,13 +85,37 @@ class UploadPostActivity : BaseActivity<ActivityUploadPostBinding>(R.layout.acti
         }
 
         binding.uploadPostButton.setOnClickListener {
-            if (imageList.isNotEmpty() && binding.uploadPostTitle.text.isNotBlank() && binding.uploadPostPrice.text.isNotBlank() && binding.uploadPostContent.text.isNotBlank()) {
-                viewModel.upload(
-                    binding.uploadPostTitle.text.toString(),
-                    binding.uploadPostPrice.text.toString(),
-                    binding.uploadPostContent.text.toString(),
-                    imageList
-                )
+            if (uriList.isNotEmpty() && binding.uploadPostTitle.text.isNotBlank() && binding.uploadPostPrice.text.isNotBlank() && binding.uploadPostContent.text.isNotBlank()) {
+                if (isUpdate) { // 게시글 업데이트
+                    uriList.forEach {
+                        val bitmap = ImageDecoder.decodeBitmap(
+                            ImageDecoder.createSource(
+                                contentResolver,
+                                it
+                            )
+                        )
+                        println(bitmap)
+                        bitmapList.add(bitmap)
+                        if (bitmapList.size == uriList.size) {
+                            viewModel.update(
+                                postId,
+                                time,
+                                binding.uploadPostTitle.text.toString(),
+                                binding.uploadPostPrice.text.toString(),
+                                binding.uploadPostContent.text.toString(),
+                                bitmapList
+                            )
+                            bitmapList.clear()
+                        }
+                    }
+                } else {    // 게시글 새 등록
+                    viewModel.upload(
+                        binding.uploadPostTitle.text.toString(),
+                        binding.uploadPostPrice.text.toString(),
+                        binding.uploadPostContent.text.toString(),
+                        uriList
+                    )
+                }
             } else {
                 Toast.makeText(this, "모든 내용은 필수 기재입니다", Toast.LENGTH_SHORT).show()
             }
@@ -71,17 +123,54 @@ class UploadPostActivity : BaseActivity<ActivityUploadPostBinding>(R.layout.acti
         }
 
         viewModel.uploadLiveData.observe(this) {
-            when(it) {
+            when (it) {
                 is Resource.Loading -> {
                     Toast.makeText(this, "업로드중", Toast.LENGTH_SHORT).show()
                 }
                 is Resource.Success -> {
                     Toast.makeText(this, "업로드 성공", Toast.LENGTH_SHORT).show()
                     setResult(100, intent)
-                    finish()
+                    finish()    // PostListFragment 로 돌아감
                 }
                 is Resource.Error -> {
                     Toast.makeText(this, it.message, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
+        viewModel.updatePostLiveData.observe(this) {
+            when (it) {
+                is Resource.Loading -> {
+                    Toast.makeText(this, "업데이트 중", Toast.LENGTH_SHORT).show()
+                }
+                is Resource.Success -> {
+                    Toast.makeText(this, "업데이트 성공", Toast.LENGTH_SHORT).show()
+                    val intent = Intent()
+                    intent.putExtra("postId", it.data.toString())
+                    setResult(100, intent)
+                    finish()    // PostDetailActivity 로 돌아가서 해당 postId로 갱신시키기 위함
+                }
+                is Resource.Error -> {
+                    Toast.makeText(this, it.message, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
+        viewModel.loadPostLiveData.observe(this) { result ->
+            when (result) {
+                is Resource.Loading -> {
+                    Log.d("loadPostLiveData", "게시글 로드중")
+                }
+                is Resource.Success -> {
+                    Log.d("loadPostLiveData", "게시글 로드완료")
+                    binding.uploadPostTitle.setText(result.data!!.title)
+                    binding.uploadPostPrice.setText(result.data.price)
+                    binding.uploadPostContent.setText(result.data.content)
+                    time = result.data.time
+                    updateImages(result.data.images.values.map { it.toUri() }.reversed())
+                }
+                is Resource.Error -> {
+                    Log.d("loadPostLiveData", result.message.toString())
                 }
             }
         }
@@ -145,18 +234,20 @@ class UploadPostActivity : BaseActivity<ActivityUploadPostBinding>(R.layout.acti
         imageLoadLauncher.launch("image/*")
     }
 
-    private fun updateImages(uriList: List<Uri>) {
+    @SuppressLint("SetTextI18n", "NotifyDataSetChanged")
+    private fun updateImages(_uriList: List<Uri>) {
 //        val images = uriList.map { ImageItems.Image(it) }
-        imageList.addAll(uriList)
+        uriList.addAll(_uriList)
         imageAdapter.notifyDataSetChanged()
+        binding.uploadPostImageCount.text = "${imageAdapter.itemCount}/10"
     }
 
     private fun initRecyclerView() {
-        imageList = mutableListOf()
-        imageAdapter = ImageAdapter(imageList, object : ImageAdapter.ItemClickListener {
+        uriList = mutableListOf()
+        imageAdapter = ImageAdapter(uriList, object : ImageAdapter.ItemClickListener {
             override fun deleteImage(position: Int) {
                 println("Clicked position = $position")
-                imageList.removeAt(position)
+                uriList.removeAt(position)
                 imageAdapter.notifyItemRemoved(position)
                 binding.uploadPostImageCount.text = "${imageAdapter.itemCount}/10"
             }

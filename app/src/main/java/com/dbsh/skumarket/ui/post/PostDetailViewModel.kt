@@ -38,7 +38,6 @@ class PostDetailViewModel : ViewModel() {
 
     fun deletePost(postId: String) {
         _deletePostLiveData.postValue(Resource.Loading())
-
         viewModelScope.launch(Dispatchers.Main) {
             val deletePostResult = repository.deletePost(postId)
             _deletePostLiveData.postValue(deletePostResult)

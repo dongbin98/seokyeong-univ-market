@@ -4,7 +4,9 @@ import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.dbsh.skumarket.databinding.ItemPostImageBinding
+import kotlin.coroutines.coroutineContext
 
 class ImageAdapter(
     private val list: MutableList<Uri>, private val itemClickListener: ItemClickListener
@@ -32,20 +34,10 @@ class ImageAdapter(
     inner class ImageViewHolder(private val binding: ItemPostImageBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Uri) {
-            binding.itemImage.setImageURI(item)
+            Glide.with(binding.root).load(item).into(binding.itemImage)
             binding.itemImageDeleteButton.setOnClickListener {
                 itemClickListener.deleteImage(adapterPosition)
             }
         }
     }
 }
-
-
-
-//class LoadMoreViewHolder(binding: ItemPostImageBinding): RecyclerView.ViewHolder(binding.root) {
-//    fun bind(itemClickListener: ImageAdapter.ItemClickListener) {
-//        itemView.setOnClickListener {
-//            itemClickListener.onLoadMoreClick()
-//        }
-//    }
-//}

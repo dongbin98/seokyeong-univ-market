@@ -3,6 +3,7 @@ package com.dbsh.skumarket.ui.post
 import android.animation.ValueAnimator
 import android.content.Intent
 import android.util.Log
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.dbsh.skumarket.R
@@ -23,14 +24,26 @@ class PostDetailActivity : BaseActivity<ActivityPostDetailBinding>(R.layout.acti
     private val auth by lazy { Firebase.auth }
     private val myUid = auth.currentUser?.uid
 
+    private val postLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if(it.resultCode == 100) {
+                // 게시글 수정(UploadPostActivity) 후 해당 Activity 에 돌아왔을 때 해당 뷰를 갱신하기 위함
+                Log.d("postLauncher", "Post List is updated")
+                val postId = it.data!!.getStringExtra("postId")
+                if(postId != null && myUid != null) // 결국 작성자 본인의 uid임으로 myUid로 로드해옴
+                    viewModel.loadPost(postId, myUid)
+            }
+        }
+
     override fun init() {
+        // PostListFragment 에서 게시물을 눌러 해당 Activity 에 들어왔을 경우
+        viewModel = PostDetailViewModel()
+
         val postId = intent.getStringExtra("postId")
         val uid = intent.getStringExtra("uid")
-        viewModel = PostDetailViewModel()
 
         if (postId != null && uid != null) {
             viewModel.loadPost(postId, uid)
-            println()
         }
 
         binding.postChat.setOnClickListener {
@@ -57,6 +70,15 @@ class PostDetailActivity : BaseActivity<ActivityPostDetailBinding>(R.layout.acti
             viewModel.deletePost(postId.toString())
         }
 
+        binding.postUpdate.setOnClickListener {
+            // update 보류 (storage 문제)
+//            Intent(this, UploadPostActivity::class.java).run {
+//                putExtra("uid", uid)
+//                putExtra("postId", postId)
+//                postLauncher.launch(this)
+//            }
+        }
+
         viewModel.loadProfileLiveData.observe(this) {
             when (it) {
                 is Resource.Loading -> {
@@ -75,8 +97,6 @@ class PostDetailActivity : BaseActivity<ActivityPostDetailBinding>(R.layout.acti
                         Glide.with(this).load(R.drawable.default_profile_img).circleCrop()
                             .into(binding.postProfileImage)
                     }
-                    println("post uid is $uid")
-                    println("my uid is $myUid")
                     if(uid.equals(myUid)) { // 내 글이라면 수정 삭제 허용 및 채팅하기 없앰
                         binding.postDelete.isVisible = true
                         binding.postUpdate.isVisible = true

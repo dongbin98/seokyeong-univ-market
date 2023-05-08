@@ -26,7 +26,7 @@ class PostListFragment : BaseFragment<FragmentPostListBinding>(R.layout.fragment
 //        viewModel.loadPosts()
 //    }
 
-    // registerForActivityResult 통해 게시글 등록, 갱신, 삭제 이후 프래그먼트로 돌아올 때 List Update
+    // registerForActivityResult 통해 게시글 등록, 삭제 이후 프래그먼트로 돌아올 때 List Update
     private val postLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if(it.resultCode == 100) {
@@ -34,7 +34,6 @@ class PostListFragment : BaseFragment<FragmentPostListBinding>(R.layout.fragment
                 viewModel.loadPosts()
             }
         }
-
 
     override fun init() {
         viewModel = PostListViewModel()

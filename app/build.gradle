@@ -88,16 +88,17 @@ dependencies {
     // Firebase
     implementation platform('com.google.firebase:firebase-bom:31.1.1')
     implementation 'com.google.firebase:firebase-analytics-ktx'
-    implementation 'com.google.firebase:firebase-database-ktx:20.1.0'
-    implementation 'com.google.firebase:firebase-storage-ktx:20.1.0'
-    implementation 'com.google.firebase:firebase-analytics-ktx:21.2.0'
+    implementation 'com.google.firebase:firebase-database-ktx:20.2.1'
+    implementation 'com.google.firebase:firebase-storage-ktx:20.2.0'
+    implementation 'com.google.firebase:firebase-analytics-ktx:21.2.2'
     // TODO: Add the dependencies for any other Firebase products you want to use
     // See https://firebase.google.com/docs/android/setup#available-libraries
     // For example, add the dependencies for Firebase Authentication and Cloud Firestore
-    implementation 'com.google.firebase:firebase-auth-ktx:21.2.0'
-    implementation 'com.google.firebase:firebase-firestore-ktx'
+    implementation 'com.google.firebase:firebase-auth-ktx:22.0.0'
+    implementation 'com.google.firebase:firebase-firestore-ktx:+'
     // 글라이드 사용한 이미지를 받기위한 것
-    implementation "com.github.bumptech.glide:glide:4.15.0"
+    implementation 'com.github.bumptech.glide:glide:4.15.0'
+    kapt('com.github.bumptech.glide:compiler:4.15.0')
     // Coroutine
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
