@@ -15,10 +15,10 @@ SeoKyeong University Market Android Native Application
 - `염동빈`
   - 서경대학교 학생인증, 회원가입 및 로그인 구현 `Firebase Authentication` `Retrofit` `Coroutine`
   - 실시간 1:1 채팅방 구현 `Firebase RealtimeDatabase`
-  - 중고거래 게시판 구현 `Firebase RealtimeDatabase + Storage`
+  - 중고거래 게시판 구현 `Firebase RealtimeDatabase + Storage` `Coroutine`
   
 - `양승협`
-  - 중고거래 게시판 구현 `Firebase RealtimeDatabase + Storage` `Coroutine`
+  - 중고거래 게시판 구현 `Firebase RealtimeDatabase + Storage`
   
 ## 2. Project Architecture   
 ```bash
